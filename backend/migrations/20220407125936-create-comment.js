@@ -8,11 +8,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      message_id: {
+      post_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Messages', // Message mis au pluriel
+          model: 'Posts', // Post mis au pluriel
           key: 'id'
         }
       },

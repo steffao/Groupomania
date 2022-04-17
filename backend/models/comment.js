@@ -11,7 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Comment.belongsTo(models.Message, {
+      models.Comment.belongsTo(models.Post, {
+        foreignKey:{
+          allowNull:false
+        }
+      })
+      models.Comment.belongsTo(models.User, {
         foreignKey:{
           allowNull:false
         }
@@ -19,12 +24,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Comment.init({
-    message_id: DataTypes.INTEGER,
+    post_id: DataTypes.INTEGER,
+    user_id: DataTypes.INTEGER,
     content: DataTypes.STRING,
-    attachment: DataTypes.STRING
+    attachment: DataTypes.STRING,
+    is_active : DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Comment',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
   });
   return Comment;
 };

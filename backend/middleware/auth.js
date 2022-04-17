@@ -1,5 +1,4 @@
 // vérification de l'id grâce token avant de lancer une requête (requete métier de controllers par exemple) 
-
 const jwt = require('jsonwebtoken')
 
 module.exports = (req, res, next) => {
@@ -8,7 +7,7 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, 'RANDOM_SECRET_TOKEN')
         
         const userId= decodedToken.userId
-        req.auth = {userId : userId} // permet d'attribuer une clé userId à la requête
+        req.auth = {userId : userId, isAdmin : isAdmin} // permet d'attribuer une clé userId à la requête
         if (req.body.userId && req.body.userId !== userId ){
             throw 'User ID non valable'
         } else {
