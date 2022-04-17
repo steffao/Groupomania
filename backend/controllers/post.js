@@ -21,15 +21,10 @@ exports.createPost = (req, res, next) => {
     delete postObject._id;
     models.Post.create({
         ...postObject,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     })
-    const post = new Sauce({
-        ...sauceObject, // le corps de la requête sauf image
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` , // req.protocole = http ou https , req.get = le host soit la racine du serveur ou l'adresse du serveur, images soit le repertoire sur le server puis le nom du fichier donne2 par multer  
-      }); 
-    models.Post.findOne({ where : {id : req.body.id}}) //  la méthode findOne() dans notre modèle Thing pour trouver le Thing unique ayant le même _id que le paramètre de la requête
-    .then(sauce => res.status(200).json(sauce))
-    .catch(error => res.status(404).json({ error }));
+    .then(() => res.status(201).json({ message: 'Post enregistré avec succès' }))
+    .catch(error => res.status(400).json({ error }));
 }
 
 //---------------------CREATE---------------------------
