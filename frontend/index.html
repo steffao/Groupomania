@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Groupomania</title>
+</head>
+<body>
+  <div id="app">
+    <nav>
+      <a href="#"><img src="#" alt="Logo de Groupomania"></a>
+      <div class="menu">
+        <ul>
+          <li>Connexion</li>
+          <li>S'enregistrer</li>
+        </ul>
+      </div>
+    </nav>
+    <h1>{{message}}</h1>
+    <article class="login_details">
+      <form action="">
+        <input type="email" placeholder="Votre email" v-model="email">
+        <input type="password" placeholder="Votre mot de passe" v-model="password">
+        <button type="submit">SE CONNECTER</button>
+      </form>
+      <a href="#">Créer un nouveau compte</a>  
+    </article>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+          message: 'Bienvenue sur le réseau social de Groupomania',
+          email:'',
+          password:'',
+          apiResponse: {
+              name : 'Melchior',
+          }
+      }
+    })
+  </script>
+</body>
+</html>
