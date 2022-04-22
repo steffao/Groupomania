@@ -1,22 +1,13 @@
-<script>
-  import LoginPage from './components/LoginPage.vue'
-  
-  
-  export default {
-    name: 'App',
-    components: {
-      LoginPage,
-    }
-  }
-  </script>
+
   
   <template>
     <div id="app">
-      <nav>
-        
-        <a href="/about">À propos</a>
-        <a href="/contact">Contact</a>
-      </nav>
-      <LoginPage />
+      <router-link to="/login">Login</router-link>
+      <router-link to="/signup">Signup</router-link>
+      
+      
+      
     </div>
+    
+    <router-view />
   </template>

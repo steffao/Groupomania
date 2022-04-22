@@ -1,21 +1,3 @@
-// ./components/SignupPage.vue
-<script>
-
-export default {
-	name: 'SignupPage',
-	data: function (){
-		return{
-			message: 'S\'inscrire',
-			email:'',
-			password:'',
-			firstName:'',
-			lastName:'',
-		}
-	},
-	
-}
-</script>
-
 <template>
     <article class="signup_details">		
 		<h1>Inscription</h1>		
@@ -26,7 +8,7 @@ export default {
 			<input type="password" placeholder="Votre mot de passe" v-model="password">
 			<button type="submit">CRÉER UN COMPTE</button>
 		</form>
-		
+        <div>Vous avez déjà un compte? <router-link to="/login">Se connecter</router-link></div>
 		
     </article>
 </template>
@@ -36,3 +18,21 @@ export default {
 		text-decoration: none;
 	}
 </style>
+
+<script>
+   
+
+    export default {
+        name: "SignupView",
+        data: function (){
+		return{
+			message: 'S\'inscrire',
+			email:'',
+			password:'',
+			firstName:'',
+			lastName:'',
+		}
+	},
+        
+    }
+</script>
