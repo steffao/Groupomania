@@ -13,6 +13,12 @@ const routes = [
         component: () =>
             import("../views/SignupView.vue") // import dynamique
     },
+    {
+        path:"/",
+        name: 'DashboardView',
+        component: () =>
+            import("../views/DashboardView.vue") // import dynamique
+    },
 ]
 
 const router = createRouter({
