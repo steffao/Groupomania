@@ -27,13 +27,20 @@ exports.signup = (req, res, next) => {
                             email: req.body.email,
                             first_name: req.body.firstName,
                             last_name: req.body.lastName,
-                            password: hash,    
+                            password: hash,
+                            is_admin: false   
                         })
                         .then((createdUser) => { // Récupération du user crée
                             console.log(createdUser.dataValues)
                             const userModel = createdUser.dataValues
+                            console.log(userModel)
                             return res.status(201).json({ 
-                                userId: userModel.id,
+                                userModel: {
+                                    userId: userModel.id,
+                                    firstName: userModel.first_name,
+                                    lastName: userModel.last_name,
+                                    isAdmin: userModel.is_admin,
+                                },
                                 token: buildToken(userModel), 
                             })
                         })
@@ -62,7 +69,12 @@ exports.login = (req, res, next) => {
                     }
                     console.log(user.id)
                     res.status(200).json({
-                        userId: user.id,
+                        user: {
+                            userId: user.id,
+                            firstName: user.first_name,
+                            lastName: user.last_name,
+                            isAdmin: user.is_admin,
+                        },
                         token: buildToken(user),
                     });
                     

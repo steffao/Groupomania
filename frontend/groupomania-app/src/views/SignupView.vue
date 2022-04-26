@@ -41,6 +41,14 @@ export default {
             errors: [],
         }
 	},
+    computed : {
+        isAuthenticated : function() {
+            return this.$store.getters.IS_USER_AUTHENTICATE_GETTER
+        },
+        isAdmin : function() {
+            return this.$store.getters.IS_USER_ISADMIN_GETTER
+        }
+    },
     methods: {
         checkForm: function () {
             this.errors = [];
@@ -100,16 +108,11 @@ export default {
                     headers: {'Content-Type' : 'application/json'},
                     body: JSON.stringify(this.user)
                 })   
-                .then(async res => {
-                    if (res.status === 201) {
-                        alert('OK');
-                    } else {
-                        const errorResponse = await res.json();
-                        this.errors.push(errorResponse.error);
-                        console.log(this.user);
-                        console.log(this.errors); 
-                    }
-                });
+                .then( userData => {
+                        this.$store.dispatch('updateUserData',userData)
+                        console.log(userData)
+                    })
+                .catch(responseError => this.errors.push(responseError.error));
             }
             
         }
