@@ -8,14 +8,14 @@ const routes = [
         name: 'LoginView',
         component: () =>
             import("../views/LoginView.vue"), // import dynamique
-        meta : {auth: false}
+        meta : {requireAuth: false}
     },
     {
         path:"/signup",
         name: 'SignupView',
         component: () =>
             import("../views/SignupView.vue"), // import dynamique
-        meta : {auth: false}
+        meta : {requireAuth: false}
     },
     {
         path:"/",
@@ -31,21 +31,21 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {    
     if (
         'requireAuth' in to.meta &&
         to.meta.requireAuth &&
         !store.getters.IS_USER_AUTHENTICATE_GETTER
     
-    ) {console.log('ododo')
+    ) {
         next('/login');
     } else if (
         'requireAuth' in to.meta &&
         !to.meta.requireAuth &&
         store.getters.IS_USER_AUTHENTICATE_GETTER
-    ) {
+    ) { 
         next('/')
-    } else {
+    } else {        
         next()
     }
 })

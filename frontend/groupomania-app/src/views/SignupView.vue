@@ -108,8 +108,10 @@ export default {
                     headers: {'Content-Type' : 'application/json'},
                     body: JSON.stringify(this.user)
                 })   
-                .then( userData => {
-                        this.$store.dispatch('updateUserData',userData)
+                .then(res => res.json()) 
+                    .then( userData => {
+                        this.$store.dispatch('updateUserData',userData);
+                        this.$router.push('/'); //cf. router/index.js check authentication
                         console.log(userData)
                     })
                 .catch(responseError => this.errors.push(responseError.error));

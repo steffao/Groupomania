@@ -1,6 +1,6 @@
 
 <template>
-    <div>Bonjour {{user.firstName}}!</div>
+    <div>Bienvenue {{user.firstName}}  !</div>
 </template>
 
 <style>
@@ -10,24 +10,23 @@ a {
 </style>
 
 <script>
+import { mapState } from 'vuex'
+
 
 export default {
     name: "DashboardView",
     
     data: function (){
         return{   
-            email:'',
-            password:'',
-            errors: [],
+            
         }
     },
     computed : {
-        user : function() {
-            return this.$store.getters.GET_USER_DATA_GETTER
-        },
+        ...mapState({user:'user', token:'token'}),
         isAdmin : function() {
             return this.$store.getters.IS_USER_ISADMIN_GETTER
-        }
+        },
     },
+    
 }   
 </script>

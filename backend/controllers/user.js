@@ -8,13 +8,22 @@ const validatePwd = (password) => {
   return pwdPattern.test(password); 
 }
 
-const buildToken = (userModel) => {
+const buildToken = (user) => {
     return jwt.sign(
-        { userId: userModel.id, isAdmin: userModel.is_admin },
+        { userId: user.id, isAdmin: user.is_admin },
         'RANDOM_SECRET_TOKEN',
         { expiresIn: '24h' },
     )
-} 
+}
+const buildUser = (user) => {
+    return {
+        userId: user.id,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        isAdmin: user.is_admin,
+    }
+    
+}
 
 exports.signup = (req, res, next) => {
     models.User.findOne({ where : {email : req.body.email}})
@@ -32,16 +41,11 @@ exports.signup = (req, res, next) => {
                         })
                         .then((createdUser) => { // Récupération du user crée
                             console.log(createdUser.dataValues)
-                            const userModel = createdUser.dataValues
-                            console.log(userModel)
+                            const user = createdUser.dataValues
+                            console.log(user)
                             return res.status(201).json({ 
-                                userModel: {
-                                    userId: userModel.id,
-                                    firstName: userModel.first_name,
-                                    lastName: userModel.last_name,
-                                    isAdmin: userModel.is_admin,
-                                },
-                                token: buildToken(userModel), 
+                                user: buildUser(user),
+                                token: buildToken(user), 
                             })
                         })
                         .catch(error => res.status(400).json({ error }));
@@ -69,12 +73,7 @@ exports.login = (req, res, next) => {
                     }
                     console.log(user.id)
                     res.status(200).json({
-                        user: {
-                            userId: user.id,
-                            firstName: user.first_name,
-                            lastName: user.last_name,
-                            isAdmin: user.is_admin,
-                        },
+                        user: buildUser(user),
                         token: buildToken(user),
                     });
                     

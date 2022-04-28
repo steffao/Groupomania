@@ -1,7 +1,7 @@
 
-<template>
+<template>   
     <article class="login_details">
-        <h1>{{isAuthenticated}} + {{isAdmin}}</h1>     
+        <h1>Connexion</h1>     
         <form @submit="submitForm" action="/" method="post">
             <div v-if="errors.length > 0" class="form__errors">
                 <p>Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
@@ -26,6 +26,7 @@ a {
 </style>
 
 <script>
+    
 export default {
     name: "LoginView",
     data: function (){
@@ -79,15 +80,15 @@ export default {
                 .then(res => res.json()) 
                     .then( userData => {
                         this.$store.dispatch('updateUserData',userData);
-                        this.$router.push('/') //cf. router/index.js check auth
+                        this.$router.push('/'); //cf. router/index.js check authentication
                         console.log(userData)
+                        
                     })
                 .catch(responseError => this.errors.push(responseError.error));
             }
             
         }
-    }
-
+    },
 }
     
 </script>
