@@ -8,23 +8,47 @@ const validatePwd = (password) => {
   return pwdPattern.test(password); 
 }
 
+const buildToken = (user) => {
+    return jwt.sign(
+        { userId: user.id, isAdmin: user.is_admin },
+        'RANDOM_SECRET_TOKEN',
+        { expiresIn: '24h' },
+    )
+}
+const buildUser = (user) => {
+    return {
+        userId: user.id,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        isAdmin: user.is_admin,
+    }
+    
+}
+
 exports.signup = (req, res, next) => {
     models.User.findOne({ where : {email : req.body.email}})
         .then(user => {
-            console.log(user)
             if (!user) {
                 if(validator.isEmail(req.body.email, {blacklisted_chars: '$="'}) && validatePwd(req.body.password)) { // Vérification de l'email
-                bcrypt.hash(req.body.password, 10) // salage du mot de passe
+                    bcrypt.hash(req.body.password, 10) // salage du mot de passe
                     .then(hash => {
                         models.User.create({
                             email: req.body.email,
-                            first_name: req.body.first_name,
-                            last_name: req.body.last_name,
+                            first_name: req.body.firstName,
+                            last_name: req.body.lastName,
                             password: hash,
-                            is_admin: req.body.is_admin,
+                            is_admin: false   
                         })
-                    .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
-                    .catch(error => res.status(400).json({ error }));
+                        .then((createdUser) => { // Récupération du user crée
+                            console.log(createdUser.dataValues)
+                            const user = createdUser.dataValues
+                            console.log(user)
+                            return res.status(201).json({ 
+                                user: buildUser(user),
+                                token: buildToken(user), 
+                            })
+                        })
+                        .catch(error => res.status(400).json({ error }));
                     })
                 } else {
                     res.status(400).json({ error: "Le format de l'adresse email est invalide ou le mot de passe n'est pas conforme"});
@@ -49,13 +73,8 @@ exports.login = (req, res, next) => {
                     }
                     console.log(user.id)
                     res.status(200).json({
-                        userId: user.id,
-                        token: jwt.sign(
-                            { userId: user.id },
-                            'RANDOM_SECRET_TOKEN',
-                            {isAdmin: user.is_admin},
-                            { expiresIn: '24h' },
-                        ),
+                        user: buildUser(user),
+                        token: buildToken(user),
                     });
                     
                 })

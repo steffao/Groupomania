@@ -1,22 +1,31 @@
+<template>
+  <div id="app">
+    <NavBar />
+    
+  </div>
+  
+  <router-view />
+</template>
+
 <script>
-  import LoginPage from './components/LoginPage.vue'
+import NavBar from './components/NavBar.vue'
+import {getCookie} from './utils/cookie.js'
+
+export default {
+  components : {
+    NavBar
+  },
+  created () {
+    const rawUserData = getCookie('userData')
+    if (rawUserData) {      
+
+      const userData = JSON.parse(rawUserData)
+      
+      if (typeof(userData) == 'object' && userData.user && userData.token) {        
+        this.$store.dispatch('updateUserData',userData)    
+      }      
+    }    
+  },
+}
   
-  
-  export default {
-    name: 'App',
-    components: {
-      LoginPage,
-    }
-  }
-  </script>
-  
-  <template>
-    <div id="app">
-      <nav>
-        
-        <a href="/about">À propos</a>
-        <a href="/contact">Contact</a>
-      </nav>
-      <LoginPage />
-    </div>
-  </template>
+</script>
