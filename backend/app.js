@@ -2,6 +2,7 @@ const express = require ('express');
 const helmet = require('helmet');
 const path = require('path');
 const authRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
 const app = express() ;
 require('dotenv').config();
 
@@ -32,5 +33,6 @@ app.use('/images', express.static(path.join(__dirname, 'images'))); // middlewar
 
 //---------------------------ROUTES----------------------
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);
 
 module.exports = app;

@@ -9,9 +9,8 @@ const post = require('../controllers/post');
 
 //-------------Route GET----------
 router.get('/', auth, post.getAllPosts);
-router.get('/:id', auth, post.getOnePost);
 
 //-------------Route POST----------
-router.post('/', auth, multer, post.createPost);
+router.post('/', auth, post.createPost);
 
 module.exports = router;

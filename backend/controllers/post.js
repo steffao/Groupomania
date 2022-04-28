@@ -1,31 +1,34 @@
 
 const models = require('../models')
 
-//---------------------FIND ALL---------------------------
-exports.getAllPosts = (req, res, next) => {
-    models.Post.find()
-    .then(post => res.status(200).json(post))
-    .catch(error => res.status(400).json({ error }));
-}
-
-//---------------------FIND ONE---------------------------
-exports.getOnePost = (req, res, next) => {
-    models.Post.findOne({ where : {id : req.body.id}}) // post id
-    .then(post => res.status(200).json(post))
-    .catch(error => res.status(400).json({ error }));
-}
 
 //---------------------CREATE---------------------------
 exports.createPost = (req, res, next) => {
-    const postObject = JSON.parse(req.body.post)
-    delete postObject._id;
-    models.Post.create({
-        ...postObject,
-        attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    })
-    .then(() => res.status(201).json({ message: 'Post enregistré avec succès' }))
+  models.Post.create({
+    user_id: req.body.userId,
+    title: req.body.title,
+    content: req.body.content,
+    likes: 0,
+    is_active: true,
+      //attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  })
+  .then(() => res.status(201).json({ message: 'Post enregistré avec succès' }))
+  .catch(error => res.status(400).json({ error }));
+}
+
+//---------------------FIND ALL---------------------------
+exports.getAllPosts = (req, res, next) => {
+    models.Post.findAll({include : {
+      model: models.User,
+      attributes:['id','first_name','last_name']
+    }})
+    .then(posts => res.status(200).json(posts))
     .catch(error => res.status(400).json({ error }));
 }
+
+
+
+
 
 //---------------------CREATE---------------------------
 exports.createSauce = (req, res, next) => { // crée une sauce
