@@ -8,8 +8,7 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, 'RANDOM_SECRET_TOKEN')
         
         const userId= decodedToken.userId   
-        
-
+        console.log(userId)
         req.auth = {userId : userId} // permet d'attribuer une clé userId à la requête
         
         if (req.body.userId && req.body.userId !== userId ){            

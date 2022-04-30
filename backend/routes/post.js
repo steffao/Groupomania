@@ -11,6 +11,6 @@ const post = require('../controllers/post');
 router.get('/', auth, post.getAllPosts);
 
 //-------------Route POST----------
-router.post('/', auth, post.createPost);
+router.post('/', auth, multer, post.createPost);
 
 module.exports = router;

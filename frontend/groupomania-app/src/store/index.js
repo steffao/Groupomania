@@ -15,7 +15,6 @@ export default createStore({
     },
     getters:{
         IS_USER_AUTHENTICATE_GETTER(state) {
-            console.log(state.token !== null)
             return state.token !== null
         },
         IS_USER_ISADMIN_GETTER(state) {

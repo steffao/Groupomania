@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.User.hasMany(models.Post,{
-        foreignKey: 'user_id'
+        foreignKey: 'user_id' //déclarer la fk dans le model d'arrivée également
       })
       models.User.hasMany(models.Comment,{
         foreignKey: 'user_id'

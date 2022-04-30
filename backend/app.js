@@ -3,7 +3,9 @@ const helmet = require('helmet');
 const path = require('path');
 const authRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
+
 const app = express() ;
+
 require('dotenv').config();
 
 app.use(express.json()); // middleware interceptant tous les objets json provenant de json.
@@ -14,6 +16,7 @@ app.use(express.json()); // middleware interceptant tous les objets json provena
 //     useUnifiedTopology: true })
 //   .then(() => console.log('Connexion à MongoDB réussie !'))
 //   .catch(() => console.log('Connexion à MongoDB échouée !'));
+
 
 //---------------------------SECURITY----------------------
 app.use(helmet()); // failles XSS
@@ -27,7 +30,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/images', express.static(path.join(__dirname, 'images'))); // middleware répondant au requête envoyée à /image
+app.use('/medias', express.static(path.join(__dirname, 'medias'))); // middleware répondant au requête envoyée à /image
 // requete envoyé a /images , le middleware sert le dossier static. en argument on passe le chemin.
 // path = chemin du server, dirname = repertoire de base, 'images' = sous réperoire image
 

@@ -36,7 +36,6 @@ export default {
                 lastName:'',
                 email:'',
                 password:'',
-
             },
             errors: [],
         }
@@ -109,10 +108,15 @@ export default {
                     body: JSON.stringify(this.user)
                 })   
                 .then(res => res.json()) 
-                    .then( userData => {
-                        this.$store.dispatch('updateUserData',userData);
-                        this.$router.push('/'); //cf. router/index.js check authentication
-                        console.log(userData)
+                    .then( res => {
+                        if (res.error ) {
+                            this.errors.push(res.error)
+
+                        } else {
+                            this.$store.dispatch('updateUserData',res);
+                            this.$router.push('/'); //cf. router/index.js check authentication
+                            console.log(res)
+                        }
                     })
                 .catch(responseError => this.errors.push(responseError.error));
             }

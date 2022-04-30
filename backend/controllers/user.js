@@ -17,7 +17,7 @@ const buildToken = (user) => {
 }
 const buildUser = (user) => {
     return {
-        userId: user.id,
+        id: user.id,
         firstName: user.first_name,
         lastName: user.last_name,
         isAdmin: user.is_admin,

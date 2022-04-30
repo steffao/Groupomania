@@ -4,10 +4,12 @@ const models = require('../models')
 
 //---------------------CREATE---------------------------
 exports.createPost = (req, res, next) => {
+  console.log(req.file)
   models.Post.create({
     user_id: req.body.userId,
     title: req.body.title,
     content: req.body.content,
+    attachment: `${req.protocol}://${req.get('host')}/medias/${req.file.filename}`,
     likes: 0,
     is_active: true,
       //attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -18,12 +20,16 @@ exports.createPost = (req, res, next) => {
 
 //---------------------FIND ALL---------------------------
 exports.getAllPosts = (req, res, next) => {
-    models.Post.findAll({include : {
+  
+  models.Post.findAll({
+    include : {
       model: models.User,
-      attributes:['id','first_name','last_name']
-    }})
-    .then(posts => res.status(200).json(posts))
-    .catch(error => res.status(400).json({ error }));
+      attributes:['id','first_name','last_name'],  
+    },
+    order : [['created_at','DESC']] // tri décroissant
+  })
+  .then(posts => res.status(200).json(posts))
+  .catch(error => res.status(400).json({ error }));
 }
 
 
