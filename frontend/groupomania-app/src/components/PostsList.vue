@@ -9,7 +9,7 @@
         </div>
         <input type="text" placeholder="Donner un titre à votre publication" v-model="newPost.title">
         <input type="text" placeholder="Rédiger votre publication" v-model="newPost.content">
-        <input type="file" id="media" name="media" accept="image/png, image/jpeg, image/mpg, image/gif, video/mp4" @change="onFileSelected">
+        <input type="file" id="media" name="media" accept="image/png, image/jpeg, image/jpg, image/gif, video/mp4" @change="onFileSelected">
         <button type="submit">Publier</button>
     </form>
     
@@ -17,7 +17,8 @@
         <div>{{post.id}}</div>           
         <div>{{post.User.first_name}} {{post.User.last_name}}</div>
         <div>{{post.title}}</div>
-        <div>{{post.content}}</div>   
+        <div>{{post.content}}</div>
+        <img :src="post.attachment" alt="">   
          
     </article>
 </template>
@@ -61,7 +62,6 @@ export default {
         onFileSelected : function (e) {
             console.log(e);
             this.selectedFile= e.target.files[0]
-
         },
         checkPostForm: function () {
             this.errors = [];
@@ -80,26 +80,33 @@ export default {
         createPost : function(e){
             e.preventDefault();
             
-            console.log(this.selectedFile)
+            this.newPost.userId = this.user.id
             
             const formData = new FormData()
-            formData.append('media', this.selectedFile)
-            formData.append('post', JSON.stringify(this.newPost))
-            console.log(formData)
-            this.newPost.userId = this.user.id
+            if(this.selectedFile) { // Si fichier
+                formData.append('media', this.selectedFile)
+                for (let key in this.newPost){
+                formData.append(key , this.newPost[key])
+                } 
+            }            
             if (this.checkPostForm()) {
                 console.log(this.newPost)
                 const apiUrl = 'http://localhost:3000/api/posts'
-                fetch(apiUrl, {
+                const apiMethod = this.selectedFile ? 
+                {
+                    method: 'post',
+                    headers: {'Authorization' : `Bearer ${this.token}`},
+                    body: formData,                    
+                } : 
+                {                    
                     method: 'post',
                     headers: {
-                    //'Content-Type' : 'application/json',
+                    'Content-Type' : 'application/json',
                     'Authorization' : `Bearer ${this.token}`,
                     },
-                    //body: JSON.stringify(this.newPost),
-                    //file: {attachment : formData},
-                })
-                
+                    body: JSON.stringify(this.newPost),
+                }
+                fetch(apiUrl, apiMethod)                
                 .then(res => res.json())
                 .then( res => {
                         if (res.error ) {
