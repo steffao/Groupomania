@@ -11,13 +11,90 @@
         <input type="file" id="media" name="media" accept="image/png, image/jpeg, image/jpg, image/gif, video/mp4" @change="onFileSelected">
         <button type="submit">Publier</button>
     </form>
-    
-    <article v-for="(post,index) in posts" :key="index">           
-        <div>{{post.id}}</div>           
-        <div>{{post.User.first_name}} {{post.User.last_name}}</div>
-        <div>{{post.title}}</div>
-        <div>{{post.content}}</div>
-        <img :src="post.attachment" alt="">   
-         
-    </article>
+
 </template>
+
+<style>
+    a {
+        text-decoration: none;
+    }
+    </style>
+    
+    <script>
+    import { mapState } from 'vuex'
+    
+    export default {
+        name: "PostsList",
+        
+        data: function (){
+            return{ 
+                errors : [],
+                newPost : {
+                    content : '',
+                    title : '',
+                    userId : '',
+                },
+            }
+        },
+        computed : {
+            ...mapState({user:'user', token:'token'}),
+            isAdmin : function() {
+                return this.$store.getters.IS_USER_ISADMIN_GETTER
+            }
+        },
+        mounted() {
+        },
+        methods : {
+            onFileSelected : function (e) {
+                console.log(e);
+                this.selectedFile= e.target.files[0]
+            },
+            checkPostForm: function () {
+                this.errors = [];
+                if (!this.newPost.title) {
+                    this.errors.push('Veuillez saisir une titre de publication');
+                }
+                if (!this.newPost.content) {
+                    this.errors.push('Veuillez saisir une publication');
+                }
+    
+                if (!this.errors.length) {
+                    return true;
+                }
+                return false
+            },
+            createPost : function(e){
+                e.preventDefault();
+                
+                this.newPost.userId = this.user.id
+                
+                const formData = new FormData()
+                if(this.selectedFile) {
+                    formData.append('media', this.selectedFile)
+                } 
+                for (let key in this.newPost){
+                    formData.append(key , this.newPost[key])
+                }            
+                if (this.checkPostForm()) {
+                    const apiUrl = 'http://localhost:3000/api/posts'
+                    fetch(apiUrl, {
+                        method: 'post',
+                        headers: {'Authorization' : `Bearer ${this.token}`},
+                        body: formData,                    
+                    })                
+                    .then(res => res.json())
+                    .then( res => {
+                            if (res.error ) {
+                                this.errors.push(res.error)
+    
+                            } else {
+                                this.$emit('postCreated') // Event vers parent
+                                document.querySelector('form').reset() // Clear form
+                            }
+                    })
+                    .catch(responseError => this.errors.push(responseError.error ? responseError.error : responseError));
+                }
+            },
+        }
+    }   
+    </script>

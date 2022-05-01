@@ -5,24 +5,16 @@ const models = require('../models')
 //---------------------CREATE---------------------------
 exports.createPost = (req, res, next) => {
   console.log(req.file)
-  const postObject = req.file ? 
+  const postObject = 
   {
     user_id: req.body.userId,
     title: req.body.title,
     content: req.body.content,
-    attachment: `${req.protocol}://${req.get('host')}/medias/${req.file.filename}`,
+    attachment:  req.file ?  `${req.protocol}://${req.get('host')}/medias/${req.file.filename}` : null,
     likes: 0,
     is_active: true,
   }
-  :
-  {
-    user_id: req.body.userId,
-    title: req.body.title,
-    content: req.body.content,
-    
-    likes: 0,
-    is_active: true,
-  }
+  
   models.Post.create({ ...postObject  })
   
   .then(() => res.status(201).json({ message: 'Post enregistré avec succès' }))
