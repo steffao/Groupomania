@@ -5,17 +5,18 @@ const models = require('../models')
 //---------------------CREATE---------------------------
 exports.createPost = (req, res, next) => {
   console.log(req.file)
-  const postObject =
+  const newPostObject =
   {
     user_id: req.body.userId,
     title: req.body.title,
     content: req.body.content,
     media_url: req.file ? `${req.protocol}://${req.get('host')}/medias/${req.file.filename}` : null,
+    is_active: req.body.isActive,
     likes: 0,
 
   }
 
-  models.Post.create({ ...postObject })
+  models.Post.create({ ...newPostObject })
 
     .then(() => res.status(201).json({ message: 'Post enregistré avec succès' }))
     .catch(error => res.status(400).json({ error }));
@@ -23,13 +24,28 @@ exports.createPost = (req, res, next) => {
 
 //---------------------FIND ALL---------------------------
 exports.getAllPosts = (req, res, next) => {
-
-  models.Post.findAll({
+  console.log(req.auth.isAdmin)
+  const isAdmin = req.auth.isAdmin
+  const postsListObject = isAdmin ?
+  {
     include: {
       model: models.User,
       attributes: ['id', 'first_name', 'last_name'],
     },
     order: [['created_at', 'DESC']] // tri décroissant
+  } :
+  {
+    where: {
+      is_active: true
+    },
+    include: {
+      model: models.User,
+      attributes: ['id', 'first_name', 'last_name'],
+    },
+    order: [['created_at', 'DESC']] // tri décroissant
+  }
+  models.Post.findAll({
+    ...postsListObject
   })
     .then(posts => res.status(200).json(posts))
     .catch(error => res.status(400).json({ error }));

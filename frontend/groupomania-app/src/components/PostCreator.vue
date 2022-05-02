@@ -33,6 +33,7 @@
                     content : '',
                     title : '',
                     userId : '',
+                    isActive : true,
                 },
             }
         },

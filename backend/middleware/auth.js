@@ -8,8 +8,9 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, 'RANDOM_SECRET_TOKEN')
         
         const userId= decodedToken.userId   
+        const isAdmin= decodedToken.isAdmin   
         console.log(userId)
-        req.auth = {userId : userId} // permet d'attribuer une clé userId à la requête
+        req.auth = {userId : userId, isAdmin : isAdmin} // permet d'attribuer une clé userId à la requête
         
         if (req.body.userId && req.body.userId !== userId ){            
             throw 'User ID non valable'

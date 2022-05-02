@@ -37,7 +37,7 @@ exports.signup = (req, res, next) => {
                             first_name: req.body.firstName,
                             last_name: req.body.lastName,
                             password: hash,
-                            is_admin: false   
+                            is_admin: req.body.isAdmin
                         })
                         .then((createdUser) => { // Récupération du user crée
                             console.log(createdUser.dataValues)
