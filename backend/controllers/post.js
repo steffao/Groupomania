@@ -15,9 +15,7 @@ exports.createPost = (req, res, next) => {
     likes: 0,
 
   }
-
   models.Post.create({ ...newPostObject })
-
     .then(() => res.status(201).json({ message: 'Post enregistré avec succès' }))
     .catch(error => res.status(400).json({ error }));
 }
@@ -55,18 +53,7 @@ exports.getAllPosts = (req, res, next) => {
 
 
 
-//---------------------CREATE---------------------------
-exports.createSauce = (req, res, next) => { // crée une sauce
-  const sauceObject = JSON.parse(req.body.sauce)
-  delete sauceObject._id; // supprime l'id crée par le front pour reprendre l'id provenant de la bdd
-  const sauce = new Sauce({
-    ...sauceObject, // le corps de la requête sauf image
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`, // req.protocole = http ou https , req.get = le host soit la racine du serveur ou l'adresse du serveur, images soit le repertoire sur le server puis le nom du fichier donne2 par multer  
-  });
-  sauce.save()
-    .then(() => res.status(201).json({ message: 'Sauce enregistrée avec succès' }))
-    .catch(error => res.status(400).json({ error }));
-}
+
 
 //---------------------UPDATE---------------------------
 // exports.updateSauce = (req, res, next) => {
@@ -81,12 +68,27 @@ exports.createSauce = (req, res, next) => { // crée une sauce
 //     .catch(error => res.status(400).json({ error }));
 // };
 
-exports.updateSauce = (req, res, next) => {
-  Sauce.findOne({ _id: req.params.id }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
-    (sauce) => {
-      if (!sauce) { // si l'objet pas trouvé en base
+exports.togglePost = (req, res, next) => {
+  models.Post.findOne({ where: {id : req.body.id} }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
+    (post) => {
+      if (!post) { // si l'objet pas trouvé en base
         res.status(404).json({
-          error: new Error('Sauce introuvable!')
+          error: new Error('Post introuvable')
+        });
+      } 
+      models.Post.update({ is_active : req.body.isActive }, { where: {id: req.body.id}})
+        .then(() => res.status(200).json({ message: 'Post modifié' }))
+        .catch(error => res.status(400).json({ error }));
+    }
+  )
+};
+
+exports.hidPost = (req, res, next) => {
+  Post.findOne({ whereid: {id : req.body.id} }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
+    (post) => {
+      if (!post) { 
+        res.status(404).json({
+          error: new Error('Post introuvable')
         });
       }
       if (sauce.userId !== req.auth.userId) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents
