@@ -7,8 +7,10 @@
         <div>{{post.User.first_name}} {{post.User.last_name}}</div>
         <div>{{post.title}}</div>
         <div>{{post.content}}</div>
-        <img :src="post.attachment" alt="">   
-         
+        <div v-if="post.media_url">
+            <video v-if="post.media_url.endsWith('mp4')" :src="post.media_url" alt=""></video>
+            <img v-else :src="post.media_url" alt="">
+        </div>    
     </article>
 </template>
 
@@ -43,6 +45,7 @@ export default {
         this.getAllPosts()
     },
     methods : {
+        
         getAllPosts: function (){            
             const apiUrl = 'http://localhost:3000/api/posts'
             fetch(apiUrl, {

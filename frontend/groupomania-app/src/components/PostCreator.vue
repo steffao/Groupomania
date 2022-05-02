@@ -1,5 +1,5 @@
 <template>
-    <form @submit="createPost">
+    <form id="postForm" @submit="createPost">
         <div v-if="errors.length > 0" class="form__errors">
             <p>Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
             <ul> 
@@ -57,6 +57,10 @@
                 if (!this.newPost.content) {
                     this.errors.push('Veuillez saisir une publication');
                 }
+                if (this.selectedFile && this.selectedFile.size > 3145728 ) { // en bytes = 3MB
+                    this.errors.push('Veuillez sélectionner un fichier infèrieur à 3MB');
+                }
+                
     
                 if (!this.errors.length) {
                     return true;
@@ -89,7 +93,13 @@
     
                             } else {
                                 this.$emit('postCreated') // Event vers parent
-                                document.querySelector('form').reset() // Clear form
+                                this.newPost = {
+                                    content : '',
+                                    title : '',
+                                    userId : '',
+                                }
+                                this.selectedFile = null
+                                document.getElementById('postForm').reset() // Clear form
                             }
                     })
                     .catch(responseError => this.errors.push(responseError.error ? responseError.error : responseError));

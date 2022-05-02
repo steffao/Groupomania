@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    attachment: DataTypes.STRING,
+    media_url: DataTypes.STRING,
     likes: DataTypes.INTEGER,
     is_active : DataTypes.BOOLEAN,
   }, {
