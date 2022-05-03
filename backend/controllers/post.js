@@ -39,25 +39,6 @@ exports.getAllPosts = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 }
 
-
-
-
-
-
-
-//---------------------UPDATE---------------------------
-// exports.updateSauce = (req, res, next) => {
-//   const sauceObject = req.file ?
-//     {
-//       ...JSON.parse(req.body.sauce),
-//       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-//     } : { ...req.body };
-//   Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }) // 1er arg est l'objet de la bdd correspondant à l'/:id de la req
-//     // 2e arg est le nouvel objet de la req dont l'id correspond à celui des param de la req
-//     .then(() => res.status(200).json({ message: 'Sauce modifiée!' }))
-//     .catch(error => res.status(400).json({ error }));
-// };
-
 exports.deletePost = (req, res, next) => {
   models.Post.findOne({ where: {id : req.params.id} }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
     (post) => {
@@ -87,66 +68,6 @@ exports.deletePost = (req, res, next) => {
 
       }
       
-    }
-  )
-};
-
-exports.hidPost = (req, res, next) => {
-  Post.findOne({ whereid: {id : req.body.id} }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
-    (post) => {
-      if (!post) { 
-        res.status(404).json({
-          error: new Error('Post introuvable')
-        });
-      }
-      if (sauce.userId !== req.auth.userId) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents
-        res.status(400).json({
-          error: new Error('Requête non autorisée!')
-        });
-      }
-      const sauceObject = req.file ?
-        {
-          ...JSON.parse(req.body.sauce),
-          imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        } : { ...req.body };
-      Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }) // 1er arg est l'objet de la bdd correspondant à l'/:id de la req
-        // 2e arg est le nouvel objet de la req dont l'id correspond à celui des param de la req
-        .then(() => res.status(200).json({ message: 'Sauce modifiée!' }))
-        .catch(error => res.status(400).json({ error }));
-    }
-  )
-};
-//---------------------DELETE---------------------------
-exports.deleteSauce = (req, res, next) => {
-  Sauce.findOne({ _id: req.params.id }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
-    (sauce) => {
-      if (!sauce) { // si l'objet pas trouvé en base
-        res.status(404).json({
-          error: new Error('Sauce introuvable!')
-        });
-      }
-      if (sauce.userId !== req.auth.userId) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents
-        res.status(400).json({
-          error: new Error('Requête non autorisée!')
-        });
-      }
-      const filename = sauce.imageUrl.split("/images/")[1];
-      fs.unlink(`images/${filename}`, () => { // suppression de l'image du répertoire
-        Sauce.deleteOne({ _id: req.params.id }).then( // callback, suppression de l'objet de la bdd
-          () => {
-            res.status(200).json({
-              message: 'Supprimée!'
-            });
-          }
-        ).catch(
-          (error) => {
-            res.status(400).json({
-              error: error
-            });
-          }
-        );
-      }
-      )
     }
   )
 };

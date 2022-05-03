@@ -1,5 +1,5 @@
 <template>
-    <button  @click="deletePost(post)">Supprimer la publication</button> 
+    <button  @click="deleteUser">Supprimer votre compte utilisateur</button> 
 </template>
 
 <style>
@@ -10,11 +10,9 @@
     
     <script>
     import { mapState } from 'vuex'
-    //import PostsList from './PostsList.vue'
     
     export default {
-        name: "DeletePostButton",
-        props: ['post'],
+        name: "DeleteUserButton",
         
         data: function (){
             return{ 
@@ -23,22 +21,18 @@
         },
         computed : {
             ...mapState({user:'user', token:'token'}),
-            isAdmin : function() {
-                return this.$store.getters.IS_USER_ISADMIN_GETTER
-            }
+            isAuthenticated : function() {
+                return this.$store.getters.IS_USER_AUTHENTICATE_GETTER
+            },
         },
         mounted() {
         },
         methods : {
-            deletePost: function(post){            
-            console.log(post)
-            this.postId = post.id
-            this.userId = post.User.id
-
-            if(this.isAdmin || post.User.id == this.user.id) {
+            deleteUser: function(){
+            if(this.isAuthenticated ) {
                 
-                const apiUrl = 'http://localhost:3000/api/posts'
-                fetch(`${apiUrl}/${this.postId}`, {
+                const apiUrl = 'http://localhost:3000/api/auth'
+                fetch(apiUrl, {
                     method: 'delete',
                     headers: {
                         'Content-Type' : 'application/json',
@@ -51,7 +45,9 @@
                                 alert(res.error)
     
                             } else {
-                                this.$emit('postDeleted') // Event vers parent                              
+                                //this.$emit('userDeleted')
+                                this.$store.dispatch('resetState');
+                                this.$router.push('/login') // Event vers parent                              
                             }
                     })
                     .catch(responseError => alert(responseError.error ? responseError.error : responseError));

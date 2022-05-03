@@ -83,15 +83,34 @@ exports.login = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 }
 
-exports.delete = (req, res, next) => {
-    models.User.destroy({ where : {id : req.body.id}})
-        .then(() => {
-            res.status(200).json({message : 'Utilisateur supprimé'});
-        })
-        .catch((error) => {
-            res.status(400).json({
-                error: error
-            });
-        })
+exports.deleteUser = (req, res, next) => {
+    models.User.findOne({ where: {id : req.auth.userId} }).then(
+        (user) => {
+            if(!user) {
+                res.status(404).json({
+                    error: new Error('Utilisateur introuvable')
+                });
+            }
+            if (req.auth.userId !== user.id) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents        
+                res.status(400).json({
+                error: ('Requête non autorisée!')
+                }); 
+                return
+            }
+            //models.User.sequelize.query("SET FOREIGN_KEY_CHECKS=0;");
+            
+            models.User.destroy({ where : {id : user.id}, force: true })
+                .then(() => {
+                    res.status(200).json({message : 'Utilisateur supprimé'});
+                    //models.User.sequelize.query("SET FOREIGN_KEY_CHECKS=1;");
+                })
+                .catch((error) => {
+                    res.status(400).json({
+                        error: error
+                    });
+                    //models.User.sequelize.query("SET FOREIGN_KEY_CHECKS=1;");
+                })
+        }
+    )
+    
 }
-
