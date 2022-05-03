@@ -11,8 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.User.hasMany(models.Post)
-      models.User.hasMany(models.Comment)
+      models.User.hasMany(models.Post,{
+        foreignKey: 'user_id' //déclarer la fk dans le model d'arrivée également
+      })
+      models.User.hasMany(models.Comment,{
+        foreignKey: 'user_id'
+      })
     }
   }
   User.init({
@@ -20,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     last_name: DataTypes.STRING,
     first_name: DataTypes.STRING,
     password: DataTypes.STRING,
-    is_admin: DataTypes.BOOLEAN
+    is_admin: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'User',

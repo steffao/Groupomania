@@ -1,44 +1,49 @@
 
 const models = require('../models')
+const fs = require('fs')
 
-//---------------------FIND ALL---------------------------
-exports.getAllPosts = (req, res, next) => {
-    models.Post.find()
-    .then(post => res.status(200).json(post))
-    .catch(error => res.status(400).json({ error }));
-}
-
-//---------------------FIND ONE---------------------------
-exports.getOnePost = (req, res, next) => {
-    models.Post.findOne({ where : {id : req.body.id}}) // post id
-    .then(post => res.status(200).json(post))
-    .catch(error => res.status(400).json({ error }));
-}
 
 //---------------------CREATE---------------------------
 exports.createPost = (req, res, next) => {
-    const postObject = JSON.parse(req.body.post)
-    delete postObject._id;
-    models.Post.create({
-        ...postObject,
-        attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    })
+  console.log(req.file)
+  const newPostObject =
+  {
+    user_id: req.body.userId,
+    title: req.body.title,
+    content: req.body.content,
+    media_url: req.file ? `${req.protocol}://${req.get('host')}/medias/${req.file.filename}` : null,
+    is_active: req.body.isActive,
+    likes: 0,
+
+  }
+  models.Post.create({ ...newPostObject })
     .then(() => res.status(201).json({ message: 'Post enregistré avec succès' }))
     .catch(error => res.status(400).json({ error }));
 }
 
-//---------------------CREATE---------------------------
-exports.createSauce = (req, res, next) => { // crée une sauce
-  const sauceObject = JSON.parse(req.body.sauce)
-  delete sauceObject._id; // supprime l'id crée par le front pour reprendre l'id provenant de la bdd
-  const sauce = new Sauce({
-    ...sauceObject, // le corps de la requête sauf image
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` , // req.protocole = http ou https , req.get = le host soit la racine du serveur ou l'adresse du serveur, images soit le repertoire sur le server puis le nom du fichier donne2 par multer  
-  }); 
-  sauce.save()
-    .then(() => res.status(201).json({ message: 'Sauce enregistrée avec succès' }))
+//---------------------FIND ALL---------------------------
+exports.getAllPosts = (req, res, next) => {
+
+  const postsListObject =
+  {
+    include: {
+      model: models.User,
+      attributes: ['id', 'first_name', 'last_name'],
+    },
+    order: [['created_at', 'DESC']] // tri décroissant
+  }
+  models.Post.findAll({
+    ...postsListObject
+  })
+    .then(posts => res.status(200).json(posts))
     .catch(error => res.status(400).json({ error }));
 }
+
+
+
+
+
+
 
 //---------------------UPDATE---------------------------
 // exports.updateSauce = (req, res, next) => {
@@ -53,12 +58,45 @@ exports.createSauce = (req, res, next) => { // crée une sauce
 //     .catch(error => res.status(400).json({ error }));
 // };
 
-exports.updateSauce = (req, res, next) => { 
-  Sauce.findOne({ _id: req.params.id }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
-    (sauce) => {
-      if (!sauce) { // si l'objet pas trouvé en base
+exports.deletePost = (req, res, next) => {
+  models.Post.findOne({ where: {id : req.params.id} }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
+    (post) => {
+      if (!post) { // si l'objet pas trouvé en base
         res.status(404).json({
-          error: new Error('Sauce introuvable!')
+          error: new Error('Post introuvable')
+        });
+      }
+      if ((!req.auth.isAdmin) && (req.auth.userId !== post.user_id)) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents        
+        res.status(400).json({
+        error: ('Requête non autorisée!')
+        }); 
+        return
+      }
+      if (post.media_url){
+        const filename = post.media_url.split("/medias/")[1];
+        fs.unlink(`medias/${filename}`, () => {
+        models.Post.destroy({ where : {id : req.params.id}})
+          .then(() => res.status(200).json({ message: 'Post supprimé' }))
+          .catch(error => res.status(400).json({ error }));
+        })
+      } else {
+        models.Post.destroy({ where : {id : req.params.id}})
+          .then(() => res.status(200).json({ message: 'Post supprimé' }))
+          .catch(error => res.status(400).json({ error }));
+          
+
+      }
+      
+    }
+  )
+};
+
+exports.hidPost = (req, res, next) => {
+  Post.findOne({ whereid: {id : req.body.id} }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
+    (post) => {
+      if (!post) { 
+        res.status(404).json({
+          error: new Error('Post introuvable')
         });
       }
       if (sauce.userId !== req.auth.userId) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents
@@ -79,7 +117,7 @@ exports.updateSauce = (req, res, next) => {
   )
 };
 //---------------------DELETE---------------------------
-exports.deleteSauce = (req, res, next) => { 
+exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
     (sauce) => {
       if (!sauce) { // si l'objet pas trouvé en base
@@ -115,41 +153,41 @@ exports.deleteSauce = (req, res, next) => {
 
 //-------------------------LIKE/UNLIKE-------------
 exports.likeSauce = (req, res, next) => { // crée une sauce
-  
+
   const userId = req.body.userId
   const like = req.body.like
-  Sauce.findOne({_id: req.params.id}).then(
+  Sauce.findOne({ _id: req.params.id }).then(
     (sauce) => {
-      if (like === 1){
+      if (like === 1) {
 
         if (!sauce.usersLiked.includes(userId)) {
-          Sauce.updateOne({_id: req.params.id}, {$push: {usersLiked: userId}, $inc: {likes: 1}})
+          Sauce.updateOne({ _id: req.params.id }, { $push: { usersLiked: userId }, $inc: { likes: 1 } })
             .then(() => res.status(200).json({ message: 'L\' utilisateur aime cette sauce!' }))
             .catch(error => res.status(400).json({ error }));
-        } 
+        }
 
-      } else if (like === -1 ) {
+      } else if (like === -1) {
 
         if (!sauce.usersDisliked.includes(userId)) {
-          Sauce.updateOne({_id: req.params.id}, {$push: {usersDisliked: userId}, $inc: {dislikes: 1}})
-            .then(() => res.status(200).json({ message: 'L\' utilisateur n\'aime pas cette sauce!'  }))
+          Sauce.updateOne({ _id: req.params.id }, { $push: { usersDisliked: userId }, $inc: { dislikes: 1 } })
+            .then(() => res.status(200).json({ message: 'L\' utilisateur n\'aime pas cette sauce!' }))
             .catch(error => res.status(400).json({ error }));
-        } 
+        }
 
       } else if (like === 0) {
 
         if (sauce.usersDisliked.includes(userId)) {
-          Sauce.updateOne({_id: req.params.id}, {$pull: {usersDisliked: userId}, $inc: {dislikes: -1}})
-            .then(() => res.status(200).json({ message: 'L\' utilisateur n\'aime pas cette sauce!'  }))
+          Sauce.updateOne({ _id: req.params.id }, { $pull: { usersDisliked: userId }, $inc: { dislikes: -1 } })
+            .then(() => res.status(200).json({ message: 'L\' utilisateur n\'aime pas cette sauce!' }))
             .catch(error => res.status(400).json({ error }));
         } else if (sauce.usersLiked.includes(userId)) {
-          Sauce.updateOne({_id: req.params.id}, {$pull: {usersLiked: userId}, $inc: {likes: -1}})
+          Sauce.updateOne({ _id: req.params.id }, { $pull: { usersLiked: userId }, $inc: { likes: -1 } })
             .then(() => res.status(200).json({ message: 'L\' utilisateur aime cette sauce!' }))
             .catch(error => res.status(400).json({ error }));
         }
-      } 
+      }
     }
   )
-  .catch((error) => res.status(404).json({ error }));
-  }
-  
+    .catch((error) => res.status(404).json({ error }));
+}
+

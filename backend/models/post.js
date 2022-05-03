@@ -11,10 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Post.belongsTo(models.User, {
-        foreignKey:{
-          allowNull:false
-        }
+      models.Post.belongsTo(models.User, {       
+        foreignKey : 'user_id', //déclarer la fk dans le model de provenance également
       }),
       models.Post.hasMany(models.Comment)
     }
@@ -23,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    attachment: DataTypes.STRING,
+    media_url: DataTypes.STRING,
     likes: DataTypes.INTEGER,
     is_active : DataTypes.BOOLEAN,
   }, {

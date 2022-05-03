@@ -24,7 +24,7 @@ export default {
       if (typeof(userData) == 'object' && userData.user && userData.token) {        
         this.$store.dispatch('updateUserData',userData)    
       }      
-    }    
+    }
   },
 }
   
