@@ -1,5 +1,6 @@
 
 const models = require('../models')
+const fs = require('fs')
 
 
 //---------------------CREATE---------------------------
@@ -22,20 +23,9 @@ exports.createPost = (req, res, next) => {
 
 //---------------------FIND ALL---------------------------
 exports.getAllPosts = (req, res, next) => {
-  console.log(req.auth.isAdmin)
-  const isAdmin = req.auth.isAdmin
-  const postsListObject = isAdmin ?
+
+  const postsListObject =
   {
-    include: {
-      model: models.User,
-      attributes: ['id', 'first_name', 'last_name'],
-    },
-    order: [['created_at', 'DESC']] // tri décroissant
-  } :
-  {
-    where: {
-      is_active: true
-    },
     include: {
       model: models.User,
       attributes: ['id', 'first_name', 'last_name'],
@@ -68,17 +58,35 @@ exports.getAllPosts = (req, res, next) => {
 //     .catch(error => res.status(400).json({ error }));
 // };
 
-exports.togglePost = (req, res, next) => {
-  models.Post.findOne({ where: {id : req.body.id} }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
+exports.deletePost = (req, res, next) => {
+  models.Post.findOne({ where: {id : req.params.id} }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
     (post) => {
       if (!post) { // si l'objet pas trouvé en base
         res.status(404).json({
           error: new Error('Post introuvable')
         });
-      } 
-      models.Post.update({ is_active : req.body.isActive }, { where: {id: req.body.id}})
-        .then(() => res.status(200).json({ message: 'Post modifié' }))
-        .catch(error => res.status(400).json({ error }));
+      }
+      if ((!req.auth.isAdmin) && (req.auth.userId !== post.user_id)) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents        
+        res.status(400).json({
+        error: ('Requête non autorisée!')
+        }); 
+        return
+      }
+      if (post.media_url){
+        const filename = post.media_url.split("/medias/")[1];
+        fs.unlink(`medias/${filename}`, () => {
+        models.Post.destroy({ where : {id : req.params.id}})
+          .then(() => res.status(200).json({ message: 'Post supprimé' }))
+          .catch(error => res.status(400).json({ error }));
+        })
+      } else {
+        models.Post.destroy({ where : {id : req.params.id}})
+          .then(() => res.status(200).json({ message: 'Post supprimé' }))
+          .catch(error => res.status(400).json({ error }));
+          
+
+      }
+      
     }
   )
 };

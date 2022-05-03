@@ -11,7 +11,8 @@ module.exports = (req, res, next) => {
         
         req.auth = {isAdmin : isAdmin} // permet d'attribuer une clé userId à la requête
         
-        if (req.body.isAdmin){            
+        if (req.body.isAdmin){
+            console.log(token)            
             throw 'User ID non autorisée'
         } else {            
             next()
