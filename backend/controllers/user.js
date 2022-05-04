@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt'); // package de la fonction de hashage des données
 const jwt = require('jsonwebtoken'); // package permettant de créer un token
 const validator = require('validator'); // validation du format de l'email
-const models = require('../models')
+const fs = require('fs')
+const { Op } = require('sequelize');
+const models = require('../models');
 
 const validatePwd = (password) => {
   let pwdPattern = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).{10,16}$/;
@@ -78,20 +80,48 @@ exports.login = (req, res, next) => {
                     });
                     
                 })
-                .catch(error => res.status(500).json({ error : 'nooooo' }));
+                .catch(error => res.status(500).json({ error : error }));
         })
         .catch(error => res.status(500).json({ error }));
 }
 
-exports.delete = (req, res, next) => {
-    models.User.destroy({ where : {id : req.body.id}})
-        .then(() => {
-            res.status(200).json({message : 'Utilisateur supprimé'});
-        })
-        .catch((error) => {
-            res.status(400).json({
-                error: error
-            });
-        })
-}
+exports.deleteUser = async (req, res, next) => {
+    const user = await models.User.findOne({ where: {id : req.auth.userId} });
+    if(!user) {
+        res.status(404).json({
+            error: new Error('Utilisateur introuvable')
+        });
+        return
+    }
+    if (req.auth.userId !== user.id) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents 
+        console.log(req.auth)       
+        console.log(user)       
+        res.status(400).json({error: ('Requête non autorisée!')}); 
+        return
+    }
+    const partialPosts = await models.Post.findAll({
+        where: {
+            user_id : user.id,
+            media_url: {
+            [Op.not]: null
+            }
+        },
+        attributes: ['media_url'] 
+    });
+    const mediaUrlList = partialPosts.map(partialPost => partialPost.getDataValue('media_url'))
+    
+    try {
+        await models.User.destroy({ where : {id : user.id}, force: true })
+    }
+    catch(e) {
+        res.status(400).json({error: e});
+        return
+    }
 
+    mediaUrlList.forEach(mediaUrl => {
+        const filename = mediaUrl.split("/medias/")[1];
+        fs.unlinkSync(`medias/${filename}`)
+    
+    });         
+    res.status(200).json({message : 'Utilisateur supprimé'});
+}

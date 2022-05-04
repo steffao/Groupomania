@@ -1,6 +1,7 @@
 
 <template>
     <div>Bienvenue {{user.firstName}}  !</div>
+    <DeleteUserButton />
     
     <section v-if="isAuthenticated" class="posts__list">
         <PostsList /> 
@@ -18,12 +19,14 @@ a {
 <script>
 import { mapState } from 'vuex'
 import PostsList from '../components/PostsList.vue'
+import DeleteUserButton from '../components/DeleteUserButton.vue'
 
 
 export default {
     name: "DashboardView",
     components : {
         PostsList,
+        DeleteUserButton,
     },    
     data: function (){
         return{      

@@ -11,8 +11,18 @@ module.exports = {
       post_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
-          model: 'Posts', // Post mis au pluriel
+          model: 'Posts', // au pluriel
+          key: 'id'
+        }
+      },
+      user_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Users', // au pluriel
           key: 'id'
         }
       },

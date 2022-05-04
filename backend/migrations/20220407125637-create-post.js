@@ -11,10 +11,11 @@ module.exports = {
       user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
           model: 'Users', // User mis au pluriel
           key: 'id'
-        }
+        },
       },
       title: {
         allowNull: false,
