@@ -7,7 +7,7 @@
             <div id="id" >{{comment.id}}</div>           
             <div >{{comment.User.first_name}} {{comment.User.last_name}}</div>      
             <div >{{comment.content}}</div>         
-            <!-- <DeletePostButton v-if="isAdmin || post.User.id == user.id" @postDeleted="getAllPosts" :post="post" /> -->        
+            <DeleteCommentButton v-if="isAdmin || comment.User.id == user.id" @commentDeleted="getAllComments" :post="post" :comment="comment" />
         </article>
     </div>  
 </template>
@@ -21,12 +21,13 @@
 <script>
     import { mapState } from 'vuex'
     import CommentCreator from './CommentCreator.vue'
+    import DeleteCommentButton from './DeleteCommentButton.vue'
     
     export default {
         name: "CommentsList",
         components : {
             CommentCreator,
-
+            DeleteCommentButton,
         },
         props: ['post'],        
         data: function (){
@@ -42,7 +43,10 @@
             }
         },
         computed : {
-            ...mapState({user:'user', token:'token'}),            
+            ...mapState({user:'user', token:'token'}),
+            isAdmin : function() {
+                return this.$store.getters.IS_USER_ISADMIN_GETTER
+            }           
         },
         mounted() {            
         },

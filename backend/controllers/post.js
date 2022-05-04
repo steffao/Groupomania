@@ -45,6 +45,7 @@ exports.deletePost = (req, res, next) => {
         res.status(404).json({
           error: new Error('Post introuvable')
         });
+        return
       }
       if ((!req.auth.isAdmin) && (req.auth.userId !== post.user_id)) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents        
         res.status(400).json({
