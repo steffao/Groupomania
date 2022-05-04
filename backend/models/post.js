@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey : {name:'user_id', allowNull:false}, //déclarer la fk dans le model de provenance également
         onDelete : 'CASCADE'
       }),
-      models.Post.hasMany(models.Comment)
+      models.Post.hasMany(models.Comment, {
+        foreignKey: 'post_id',
+        onDelete : 'CASCADE'
+      })
     }
   }
   Post.init({

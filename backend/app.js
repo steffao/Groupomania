@@ -36,6 +36,6 @@ app.use('/medias', express.static(path.join(__dirname, 'medias'))); // middlewar
 
 //---------------------------ROUTES----------------------
 app.use('/api/auth', authRoutes);
-app.use('/api/posts', postRoutes);
+app.use('/api/posts', postRoutes); // comments inclus
 
 module.exports = app;

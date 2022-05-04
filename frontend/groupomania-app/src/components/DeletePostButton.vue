@@ -30,8 +30,7 @@
         mounted() {
         },
         methods : {
-            deletePost: function(post){            
-            console.log(post)
+            deletePost: function(post){
             this.postId = post.id
             this.userId = post.User.id
 

@@ -1,17 +1,14 @@
 <template>
-    <form id="postForm" @submit="createPost">
+    <form id="commentForm" @submit="createComment">
         <div v-if="errors.length > 0" class="form__errors">
             <p>Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
             <ul> 
                 <li v-for="(error,index) in errors" :key="index">{{ error }}</li> 
             </ul>
         </div>
-        <input type="text" placeholder="Donner un titre à votre publication" v-model="newPost.title">
-        <input type="text" placeholder="Rédiger votre publication" v-model="newPost.content">
-        <input type="file" id="media" name="media" accept="image/png, image/jpeg, image/jpg, image/gif, video/mp4" @change="onFileSelected">
+        <input type="text" placeholder="Répondre" v-model="newComment.content">
         <button type="submit">Publier</button>
     </form>
-
 </template>
 
 <style>
@@ -24,19 +21,20 @@
     import { mapState } from 'vuex'
     
     export default {
-        name: "PostsList",
+        name: "CommentCreator",
         
         data: function (){
             return{ 
                 errors : [],
-                newPost : {
+                newComment : {
                     content : '',
-                    title : '',
+                    postId: '',
                     userId : '',
                     
                 },
             }
         },
+        props: ['post'],
         computed : {
             ...mapState({user:'user', token:'token'}),
             isAdmin : function() {
@@ -46,46 +44,35 @@
         mounted() {
         },
         methods : {
-            onFileSelected : function (e) {
-                console.log(e);
-                this.selectedFile= e.target.files[0]
+            test : function(e) {
+                e.preventDefault();
+                console.log(this.post)
             },
-            checkPostForm: function () {
-                this.errors = [];
-                if (!this.newPost.title) {
-                    this.errors.push('Veuillez saisir une titre de publication');
-                }
-                if (!this.newPost.content) {
+            checkCommentForm: function () {
+                this.errors = [];                
+                if (!this.newComment.content) {
                     this.errors.push('Veuillez saisir une publication');
                 }
-                if (this.selectedFile && this.selectedFile.size > 3145728 ) { // en bytes = 3MB
-                    this.errors.push('Veuillez sélectionner un fichier infèrieur à 3MB');
-                }
-                
-    
                 if (!this.errors.length) {
                     return true;
                 }
                 return false
             },
-            createPost : function(e){
+            createComment : function(e){
                 e.preventDefault();
+                this.newComment.userId = this.user.id
+                this.newComment.postId = this.post.id
+                console.log(this.newComment)
                 
-                this.newPost.userId = this.user.id
-                
-                const formData = new FormData()
-                if(this.selectedFile) {
-                    formData.append('media', this.selectedFile)
-                } 
-                for (let key in this.newPost){
-                    formData.append(key , this.newPost[key])
-                }            
-                if (this.checkPostForm()) {
-                    const apiUrl = 'http://localhost:3000/api/posts'
+                           
+                if (this.checkCommentForm()) {
+                    const apiUrl = `http://localhost:3000/api/posts/${this.post.id}/comments`
                     fetch(apiUrl, {
                         method: 'post',
-                        headers: {'Authorization' : `Bearer ${this.token}`},
-                        body: formData,                    
+                        headers: {
+                            'Authorization' : `Bearer ${this.token}`,
+                            'Content-Type' : 'application/json',},
+                        body: JSON.stringify(this.newComment),                    
                     })                
                     .then(res => res.json())
                     .then( res => {
@@ -93,14 +80,14 @@
                                 this.errors.push(res.error)
     
                             } else {
-                                this.$emit('postCreated') // Event vers parent
-                                this.newPost = {
+                                this.$emit('commentCreated') // Event vers parent
+                                this.newComment = {
                                     content : '',
                                     title : '',
                                     userId : '',
                                 }
-                                this.selectedFile = null
-                                document.getElementById('postForm').reset() // Clear form
+                                
+                                document.getElementById('commentForm').reset() // Clear form
                             }
                     })
                     .catch(responseError => this.errors.push(responseError.error ? responseError.error : responseError));
