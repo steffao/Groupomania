@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.Post.belongsTo(models.User, {       
-        foreignKey : 'user_id', //déclarer la fk dans le model de provenance également
+        foreignKey : {name:'user_id', allowNull:false}, //déclarer la fk dans le model de provenance également
+        onDelete : 'CASCADE'
       }),
       models.Post.hasMany(models.Comment)
     }

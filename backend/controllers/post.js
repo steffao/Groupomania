@@ -1,11 +1,12 @@
 
 const models = require('../models')
+const { Op } = require('sequelize');
 const fs = require('fs')
 
 
 //---------------------CREATE---------------------------
 exports.createPost = (req, res, next) => {
-  console.log(req.file)
+  
   const newPostObject =
   {
     user_id: req.body.userId,
@@ -14,7 +15,6 @@ exports.createPost = (req, res, next) => {
     media_url: req.file ? `${req.protocol}://${req.get('host')}/medias/${req.file.filename}` : null,
     is_active: req.body.isActive,
     likes: 0,
-
   }
   models.Post.create({ ...newPostObject })
     .then(() => res.status(201).json({ message: 'Post enregistré avec succès' }))
@@ -22,7 +22,7 @@ exports.createPost = (req, res, next) => {
 }
 
 //---------------------FIND ALL---------------------------
-exports.getAllPosts = (req, res, next) => {
+exports.getAllPosts = async (req, res, next) => {
 
   const postsListObject =
   {
@@ -32,6 +32,27 @@ exports.getAllPosts = (req, res, next) => {
     },
     order: [['created_at', 'DESC']] // tri décroissant
   }
+  
+       
+  const partialPosts = await models.Post.findAll({
+        where: {
+          user_id : 1,
+          media_url: {
+            [Op.not]: null
+          }
+        },
+        attributes: ['media_url'] 
+    });
+    const mediaUrlList = partialPosts.map(partialPost => partialPost.getDataValue('media_url'))
+
+    console.log(mediaUrlList)
+      
+    
+    
+    
+   
+  
+  
   models.Post.findAll({
     ...postsListObject
   })
