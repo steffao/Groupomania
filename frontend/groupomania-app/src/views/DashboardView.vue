@@ -5,8 +5,6 @@
     
     <section v-if="isAuthenticated" class="posts__list">
         <PostsList /> 
-           
-
     </section>
 </template>
 

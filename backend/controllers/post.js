@@ -1,6 +1,5 @@
 
 const models = require('../models')
-const { Op } = require('sequelize');
 const fs = require('fs')
 
 
@@ -12,8 +11,7 @@ exports.createPost = (req, res, next) => {
     user_id: req.body.userId,
     title: req.body.title,
     content: req.body.content,
-    media_url: req.file ? `${req.protocol}://${req.get('host')}/medias/${req.file.filename}` : null,
-    is_active: req.body.isActive,
+    media_url: req.file ? `${req.protocol}://${req.get('host')}/medias/${req.file.filename}` : null,    
     likes: 0,
   }
   models.Post.create({ ...newPostObject })
@@ -32,27 +30,7 @@ exports.getAllPosts = async (req, res, next) => {
     },
     order: [['created_at', 'DESC']] // tri décroissant
   }
-  
-       
-  const partialPosts = await models.Post.findAll({
-        where: {
-          user_id : 1,
-          media_url: {
-            [Op.not]: null
-          }
-        },
-        attributes: ['media_url'] 
-    });
-    const mediaUrlList = partialPosts.map(partialPost => partialPost.getDataValue('media_url'))
-
-    console.log(mediaUrlList)
-      
-    
-    
-    
    
-  
-  
   models.Post.findAll({
     ...postsListObject
   })
@@ -85,10 +63,7 @@ exports.deletePost = (req, res, next) => {
         models.Post.destroy({ where : {id : req.params.id}})
           .then(() => res.status(200).json({ message: 'Post supprimé' }))
           .catch(error => res.status(400).json({ error }));
-          
-
-      }
-      
+      }      
     }
   )
 };

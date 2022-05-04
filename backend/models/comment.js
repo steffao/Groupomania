@@ -12,11 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.Comment.belongsTo(models.Post, {
-        foreignKey: 'post_id', 
+        foreignKey : {name:'post_id', allowNull:false}, //déclarer la fk dans le model de provenance également
+        onDelete : 'CASCADE'
       })
       models.Comment.belongsTo(models.User, {
-        
-        foreignKey: 'user_id',
+        foreignKey : {name:'user_id', allowNull:false}, //déclarer la fk dans le model de provenance également
+        onDelete : 'CASCADE'
       })
     }
   }
@@ -24,8 +25,6 @@ module.exports = (sequelize, DataTypes) => {
     post_id: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
     content: DataTypes.STRING,
-    attachment: DataTypes.STRING,
-    is_active : DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Comment',
