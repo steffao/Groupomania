@@ -11,7 +11,7 @@
             <video v-if="post.media_url.endsWith('mp4')" :src="post.media_url" alt=""></video>
             <img v-else :src="post.media_url" alt="">
         </div> 
-        <CommentsWrapper :post="post"/>     
+        <CommentsList :post="post"/>     
         <DeletePostButton v-if="isAdmin || post.User.id == user.id" @postDeleted="getAllPosts" :post="post" />
         
     </article>
@@ -27,14 +27,14 @@ a {
 import { mapState } from 'vuex'
 import PostCreator from './PostCreator.vue'
 import DeletePostButton from './DeletePostButton.vue'
-import CommentsWrapper from './CommentsWrapper.vue'
+import CommentsList from './CommentsList.vue'
 
 export default {
     name: "PostsList",
     components : {
         PostCreator,
         DeletePostButton,
-        CommentsWrapper
+        CommentsList
         
     },
     
