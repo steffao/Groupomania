@@ -42,7 +42,8 @@ exports.getAllComments = async (req, res, next) => {
 //---------------------DELETE ONE---------------------------
 
 exports.deleteComment = (req, res, next) => {
-  models.Comment.findOne({ where: { id : req.params.id  } }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
+  console.log(req.params)
+  models.Comment.findOne({ where: {post_id : req.params.postid, id : req.params.id  } }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
     (comment) => {
       if (!comment) { // si l'objet pas trouvé en base
         res.status(404).json({
@@ -63,25 +64,3 @@ exports.deleteComment = (req, res, next) => {
     }
   )
 };
-// exports.deleteComment = (req, res, next) => {
-//   models.Comment.findOne({ where: {post_id : req.params.postid, id : req.params.id  } }).then( // On cherche à récupérer le userId de l'objet à suppr pour comparer au userId de la requête
-//     (comment) => {
-//       if (!comment) { // si l'objet pas trouvé en base
-//         res.status(404).json({
-//           error: new Error('Commentaire introuvable')
-//         });
-//         return
-//       }
-//       if ((!req.auth.isAdmin) && (req.auth.userId !== comment.user_id)) { // Si le userId de la req (défini dans le middleware auth) et le userId de l'objet en base sont différents        
-//         res.status(400).json({
-//         error: ('Requête non autorisée!')
-//         }); 
-//         return
-//       }
-      
-//       models.Comment.destroy({ where : {id : req.params.id}})
-//         .then(() => res.status(200).json({ message: 'Commentaire supprimé' }))
-//         .catch(error => res.status(400).json({ error }));           
-//     }
-//   )
-// };

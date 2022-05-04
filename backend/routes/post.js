@@ -19,7 +19,7 @@ router.delete('/:id', auth, multer, post.deletePost);
 
 router.get('/:postid/comments', auth, comment.getAllComments);
 router.post('/:postid/comments', auth, comment.createComment);
-router.delete('/comments/:id', auth, comment.deleteComment);
+router.delete('/:postid/comments/:id', auth, comment.deleteComment);
 
 
 

@@ -33,12 +33,12 @@
                 this.postId = this.post.id
                 this.commentId = comment.id
                 this.userId = comment.User.id
-                console.log(this.commentId)
+                console.log(this.postId)
 
                 if(this.isAdmin || comment.User.id == this.user.id) {
                     
                     const apiUrl = 'http://localhost:3000/api/posts'
-                    fetch(`${apiUrl}/comments/${this.commentId}`, {
+                    fetch(`${apiUrl}/${this.postId}/comments/${this.commentId}`, {
                         method: 'delete',
                         headers: {
                             'Content-Type' : 'application/json',
