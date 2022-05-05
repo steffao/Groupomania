@@ -13,8 +13,8 @@ const validatePwd = (password) => {
 const buildToken = (user) => {
     return jwt.sign(
         { userId: user.id, isAdmin: user.is_admin },
-        'RANDOM_SECRET_TOKEN',
-        { expiresIn: '24h' },
+        process.env.SECRET_TOKEN,
+        { expiresIn: process.env.TOKEN_EXPIRES_IN },
     )
 }
 const buildUser = (user) => {
@@ -23,8 +23,7 @@ const buildUser = (user) => {
         firstName: user.first_name,
         lastName: user.last_name,
         isAdmin: user.is_admin,
-    }
-    
+    }    
 }
 
 exports.signup = (req, res, next) => {

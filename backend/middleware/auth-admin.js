@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
     try {
         
         const token = req.headers.authorization.split(' ')[1];
-        const decodedToken = jwt.verify(token, 'RANDOM_SECRET_TOKEN')
+        const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN)
         const isAdmin= decodedToken.isAdmin   
         
         req.auth = {isAdmin : isAdmin} // permet d'attribuer une clé userId à la requête
@@ -19,7 +19,6 @@ module.exports = (req, res, next) => {
         }
 
     } catch (error) {
-        console.log(jwt.verify(req.headers.authorization.split(' ')[1], 'RANDOM_SECRET_TOKEN').isAdmin)
         res.status(403).json({error :error || 'Requête non autorisée'})
     }
 }

@@ -10,14 +10,6 @@ require('dotenv').config();
 
 app.use(express.json()); // middleware interceptant tous les objets json provenant de json.
 
-//---------------------------ADRESSE BDD----------------------
-// mongoose.connect(`mongodb+srv://${process.env.MDB_USER}:${process.env.MDB_PWD}@${process.env.MDB_CLUSTER}/${process.env.MDB_DB_NAME}?retryWrites=true&w=majority`, // adress de la base mongoDB
-//   { useNewUrlParser: true,
-//     useUnifiedTopology: true })
-//   .then(() => console.log('Connexion à MongoDB réussie !'))
-//   .catch(() => console.log('Connexion à MongoDB échouée !'));
-
-
 //---------------------------SECURITY----------------------
 app.use(helmet()); // failles XSS
 
