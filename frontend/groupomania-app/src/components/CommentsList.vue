@@ -1,6 +1,10 @@
 <template>
-    <button type="button" v-if="isVisible == false" @click="toggleComments">Afficher les commentaires</button>    
-    <button type="button" v-if="isVisible == true" @click="toggleComments">Masquer les commentaires</button>
+    <button type="button" v-if="isVisible == false" @click="toggleComments" class="w3-button w3-theme-d2 w3-margin-bottom">
+        <i class="fa fa-comment"></i>   Afficher les commentaires
+    </button>    
+    <button type="button" v-if="isVisible == true" @click="toggleComments" class="w3-button w3-theme-d2 w3-margin-bottom">
+        <i class="fa fa-comment"></i>   Masquer les commentaires
+    </button>
     <div class="comments__container" v-if="isVisible == true">
         <CommentCreator @commentCreated="getAllComments" :post="post"/>
         <article v-for="(comment,index) in comments" :key="index">           

@@ -1,5 +1,7 @@
 <template>
-    <button  @click="deletePost(post)">Supprimer la publication</button> 
+    <button  @click="deletePost(post)" class="w3-button w3-theme-d2 w3-margin-bottom w3-right">
+        <i class="fa-regular fa-trash-can"></i>   Supprimer la publication
+    </button> 
 </template>
 
 <style>

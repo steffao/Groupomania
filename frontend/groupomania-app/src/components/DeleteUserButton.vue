@@ -1,5 +1,5 @@
 <template>
-    <button  @click="deleteUser">Supprimer votre compte utilisateur</button> 
+    <button class="w3-bar-item w3-button" @click="deleteUser">Supprimer votre compte utilisateur</button> 
 </template>
 
 <style>

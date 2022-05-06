@@ -1,5 +1,7 @@
 <template>
-    <button  @click="deleteComment(comment)">Supprimer le commentaire</button> 
+    <button  @click="deleteComment(comment)" class="w3-button w3-theme-d2 w3-margin-bottom">
+        <i class="fa-regular fa-trash-can"></i> Supprimer le commentaire
+    </button> 
 </template>
 
 <style>

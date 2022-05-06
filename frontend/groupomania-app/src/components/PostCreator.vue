@@ -1,17 +1,27 @@
 <template>
-    <form id="postForm" @submit="createPost">
-        <div v-if="errors.length > 0" class="form__errors">
-            <p>Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
-            <ul> 
-                <li v-for="(error,index) in errors" :key="index">{{ error }}</li> 
-            </ul>
+    <div class="w3-row-padding">
+        <div class="w3-col m12">
+            <div class="w3-card w3-round w3-white">
+                <article class="w3-container w3-padding">
+                    <form id="postForm" @submit="createPost">
+                        <div v-if="errors.length > 0" class="form__errors">
+                            <p class="w3-opacity">Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
+                            <ul> 
+                                <li v-for="(error,index) in errors" :key="index">{{ error }}</li> 
+                            </ul>
+                        </div>
+                        <input class="w3-border w3-padding" type="text" placeholder="Donner un titre à votre publication" v-model="newPost.title">
+                        <input class="w3-border w3-padding" type="text" placeholder="Rédiger votre publication" v-model="newPost.content">
+                        <input type="file" id="media" name="media" accept="image/png, image/jpeg, image/jpg, image/gif, video/mp4" @change="onFileSelected">
+                        <button class="w3-button w3-theme" type="submit">
+                            <i class="fa fa-pencil"></i>    Publier</button>
+                    </form>
+                </article>
+            </div>
         </div>
-        <input type="text" placeholder="Donner un titre à votre publication" v-model="newPost.title">
-        <input type="text" placeholder="Rédiger votre publication" v-model="newPost.content">
-        <input type="file" id="media" name="media" accept="image/png, image/jpeg, image/jpg, image/gif, video/mp4" @change="onFileSelected">
-        <button type="submit">Publier</button>
-    </form>
 
+    </div>
+    
 </template>
 
 <style>

@@ -8,11 +8,11 @@
                 <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4">
                     <img class="w3-margin-right" src="../assets//images/groupomania_logo/icon-left-font-monochrome-white.svg" alt="Logo de Groupomania" style="max-height: 20px">
                 </a>
-                <div class="w3-dropdown-hover w3-hide-small w3-right">
+                <div class="w3-dropdown-hover w3-right">
                     <button class="w3-button w3-padding-large" title="User Settings"><i class="fa fa-user"></i></button>     
                     <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:180px">
-                        <button @click="logoutUser" class="w3-bar-item w3-button">Déconnexion</button>                
-                        <button @click="logoutUser" class="w3-bar-item w3-button">Supprimer votre compte utilisateur</button>                
+                        <button @click="logoutUser" class="w3-bar-item w3-button">Déconnexion</button>
+                        <DeleteUserButton />              
                     </div>
                 </div>            
             </div>
@@ -45,9 +45,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import DeleteUserButton from './/DeleteUserButton.vue'
 
 export default {
     name: "NavBar",
+    components : {
+        DeleteUserButton
+    },
     
     data: function (){
         return{   
