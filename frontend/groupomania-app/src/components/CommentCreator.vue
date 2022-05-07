@@ -6,18 +6,23 @@
                 <li v-for="(error,index) in errors" :key="index">{{ error }}</li> 
             </ul>
         </div>
-        <input type="text" placeholder="Répondre" v-model="newComment.content">
-        <button type="submit">Publier</button>
+        <div class="post-comment">
+            <input type="text" placeholder="Répondre" v-model="newComment.content" class="w3-border w3-padding">
+            <button type="submit">Publier</button>
+        </div>        
     </form>
+    <hr class="w3-clear">
 </template>
 
 <style>
-    a {
-        text-decoration: none;
-    }
-    </style>
+    .post-comment {
+        display: flex;
+        flex-direction: column;
+    }   
+
+</style>
     
-    <script>
+<script>
     import { mapState } from 'vuex'
     
     export default {

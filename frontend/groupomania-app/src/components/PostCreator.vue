@@ -10,27 +10,52 @@
                                 <li v-for="(error,index) in errors" :key="index">{{ error }}</li> 
                             </ul>
                         </div>
-                        <input class="w3-border w3-padding" type="text" placeholder="Donner un titre à votre publication" v-model="newPost.title">
-                        <input class="w3-border w3-padding" type="text" placeholder="Rédiger votre publication" v-model="newPost.content">
-                        <input type="file" id="media" name="media" accept="image/png, image/jpeg, image/jpg, image/gif, video/mp4" @change="onFileSelected">
+                        <input class="w3-border w3-padding w3-margin-bottom-4" type="text" placeholder="Donner un titre à votre publication" v-model="newPost.title">
+                        <textarea class="w3-border w3-padding w3-margin-bottom-4" type="text" placeholder="Rédiger votre publication" v-model="newPost.content"></textarea>
+                        <input class="w3-padding w3-margin-bottom-4 custom-file-input" type="file" id="media" name="media" accept="image/png, image/jpeg, image/jpg, image/gif, video/mp4" @change="onFileSelected">
                         <button class="w3-button w3-theme" type="submit">
-                            <i class="fa fa-pencil"></i>    Publier</button>
+                            <i class="fa fa-pencil"></i>    Publier
+                        </button>
                     </form>
                 </article>
             </div>
         </div>
-
     </div>
     
 </template>
 
-<style>
-    a {
-        text-decoration: none;
+<style scoped>
+    #postForm {
+        display: flex;
+        flex-direction: column;
     }
-    </style>
+    .w3-margin-bottom-4 {
+        margin-bottom: 4px;
+    }
+    .custom-file-input::-webkit-file-upload-button {
+        visibility: hidden;
+    }
+    .custom-file-input::before {
+        content: 'Insérer une image/vidéo';
+        display: inline-block;
+        border: 1px solid #999;
+        padding: 8px 8px;
+        outline: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        cursor: pointer;
+        text-shadow: 1px 1px #fff;        
+    }
+    .custom-file-input:hover::before {
+        border-color: black;
+    }
+    .custom-file-input:active::before {
+        background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    }
+
+</style>
     
-    <script>
+<script>
     import { mapState } from 'vuex'
     
     export default {
@@ -118,4 +143,4 @@
             },
         }
     }   
-    </script>
+</script>

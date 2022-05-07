@@ -1,24 +1,36 @@
 <template>
-    <button type="button" v-if="isVisible == false" @click="toggleComments" class="w3-button w3-theme-d2 w3-margin-bottom">
+    <button type="button" v-if="isVisible == false" @click="toggleComments" id="comments-btn" class="w3-button w3-theme-d2 w3-margin-bottom">
         <i class="fa fa-comment"></i>   Afficher les commentaires
     </button>    
-    <button type="button" v-if="isVisible == true" @click="toggleComments" class="w3-button w3-theme-d2 w3-margin-bottom">
+    <button type="button" v-if="isVisible == true" @click="toggleComments" id="comments-btn" class="w3-button w3-theme-d2 w3-margin-bottom">
         <i class="fa fa-comment"></i>   Masquer les commentaires
     </button>
     <div class="comments__container" v-if="isVisible == true">
         <CommentCreator @commentCreated="getAllComments" :post="post"/>
-        <article v-for="(comment,index) in comments" :key="index">           
-            <div id="id" >{{comment.id}}</div>           
-            <div >{{comment.User.first_name}} {{comment.User.last_name}}</div>      
-            <div >{{comment.content}}</div>         
+        <article v-for="(comment,index) in comments" :key="index">
+            <article class="comment-bubble">
+                <h3><b>{{comment.User.first_name}} {{comment.User.last_name}}</b></h3>
+                <div>{{comment.content}}</div> 
+            </article>          
+                    
             <DeleteCommentButton v-if="isAdmin || comment.User.id == user.id" @commentDeleted="getAllComments" :post="post" :comment="comment" />
         </article>
     </div>  
 </template>
 
-<style>
-    a {
-        text-decoration: none;
+<style scoped>
+    .comment-bubble {
+        padding: 8px;
+        margin-bottom: 8px ;
+        border-radius: 10px;
+        background-color: rgb(255, 209, 210);
+    }
+    @media screen and (max-width: 601px) {
+        #comments-btn {
+            width: 100%;
+            text-overflow: ellipsis;
+
+        }
     }
 </style>
     
