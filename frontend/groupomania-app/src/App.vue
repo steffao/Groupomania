@@ -8,7 +8,8 @@
       <div class="w3-row">
         <router-view />
       </div>      
-    </main>   
+    </main>
+    <FooterBar />
   </div>
   
   
@@ -17,21 +18,31 @@
 
 <style lang="css">
   @import '../src/assets/style/style.css';
-  @import url("https://www.w3schools.com/lib/w3-theme-blue-grey.css");
   @import url('https://fonts.googleapis.com/css?family=Open+Sans');
   @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+  @import url("https://kit.fontawesome.com/ac6d6fa5a1.js");
+  body {
+    background-image: url("./assets/images/groupomania_logo/icon.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 135% ;
+    background-position: 185% 60%;
+  }
   
-  
-
-
 </style>
+
 <script>
 import NavBar from './components/NavBar.vue'
+import FooterBar from './components/FooterBar.vue'
 import {getCookie} from './utils/cookie.js'
 
 export default {
   components : {
-    NavBar
+    NavBar,
+    FooterBar
+  },
+  metaInfo :{
+    title: 'Groupomania'
   },
   created () {
     const rawUserData = getCookie('userData')

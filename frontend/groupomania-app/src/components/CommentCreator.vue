@@ -1,14 +1,14 @@
 <template>
     <form id="commentForm" @submit="createComment">
         <div v-if="errors.length > 0" class="form__errors">
-            <p>Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
+            <p class="error-list-theme">Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
             <ul> 
-                <li v-for="(error,index) in errors" :key="index">{{ error }}</li> 
+                <li v-for="(error,index) in errors" :key="index" class="error-list-theme">{{ error }}</li> 
             </ul>
         </div>
         <div class="post-comment">
             <input type="text" placeholder="Répondre" v-model="newComment.content" class="w3-border w3-padding">
-            <button type="submit">Publier</button>
+            <button type="submit" class="w3-button w3-theme-d2 w3-margin-bottom">Publier un commentaire</button>
         </div>        
     </form>
     <hr class="w3-clear">
@@ -18,7 +18,10 @@
     .post-comment {
         display: flex;
         flex-direction: column;
-    }   
+    }
+    .error-list-theme {
+        color: rgb(255, 36, 30) !important;  
+    }
 
 </style>
     

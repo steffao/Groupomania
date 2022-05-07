@@ -5,9 +5,9 @@
                 <article class="w3-container w3-padding">
                     <form id="postForm" @submit="createPost">
                         <div v-if="errors.length > 0" class="form__errors">
-                            <p class="w3-opacity">Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
+                            <p class="w3-opacity error-list-theme">Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
                             <ul> 
-                                <li v-for="(error,index) in errors" :key="index">{{ error }}</li> 
+                                <li v-for="(error,index) in errors" :key="index" class="error-list-theme">{{ error }}</li> 
                             </ul>
                         </div>
                         <input class="w3-border w3-padding w3-margin-bottom-4" type="text" placeholder="Donner un titre à votre publication" v-model="newPost.title">
@@ -51,6 +51,9 @@
     }
     .custom-file-input:active::before {
         background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    }
+    .error-list-theme {
+        color: rgb(255, 36, 30) !important;  
     }
 
 </style>

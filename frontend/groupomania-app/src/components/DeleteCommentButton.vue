@@ -1,12 +1,19 @@
 <template>
-    <button  @click="deleteComment(comment)" class="w3-button w3-theme-d2 w3-margin-bottom">
-        <i class="fa-regular fa-trash-can"></i> Supprimer le commentaire
+    <button  @click="deleteComment(comment)" class="w3-button comment-delete-btn w3-margin-bottom">
+        <font-awesome-icon icon="fa-solid fa-xmark" />x Supprimer le commentaire
     </button> 
 </template>
 
-<style>
-    a {
-        text-decoration: none;
+<style scoped>
+    .comment-delete-btn {
+        color: rgb(255, 36, 30) !important;
+        background-color: rgb(255, 255, 255) !important;
+        font-size: 12px;
+        
+    }
+    .comment-delete-btn:hover {
+        text-decoration: underline;
+              
     }
     </style>
     

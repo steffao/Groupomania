@@ -1,28 +1,51 @@
 
-<template>   
-    <article class="login_details">
-        <h1>Connexion</h1>     
-        <form @submit="submitForm" action="/" method="post">
-            <div v-if="errors.length > 0" class="form__errors">
-                <p>Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
-                <ul> 
-                    <li v-for="(error,index) in errors" :key="index">{{ error }}</li> 
-                </ul>
+<template>
+    <div class="w3-row-padding">
+        <div class="w3-col m12">
+            <div class="w3-card w3-round w3-white">   
+                <article class="login_details">
+                    <h1>Connexion</h1>     
+                    <form @submit="submitForm" action="/" method="post">
+                        <div v-if="errors.length > 0" class="form__errors">
+                            <p class="error-list-theme">Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
+                            <ul> 
+                                <li v-for="(error,index) in errors" :key="index" class="error-list-theme">{{ error }}</li> 
+                            </ul>
+                        </div>                        
+                        <input type="email" placeholder="Votre email" v-model="user.email" class="w3-border w3-padding w3-margin-bottom-4">
+                        <input type="password" placeholder="Votre mot de passe" v-model="user.password" class="w3-border w3-padding w3-margin-bottom-4">
+                        <button type="submit" class="w3-button w3-theme">SE CONNECTER</button>
+                    </form>
+                    <div>Vous n'avez pas encore de compte? 
+                        <router-link to="/signup" class="switch-to-signup-theme">Créer un compte</router-link>
+                    </div>
+                </article>
             </div>
-            <input type="email" placeholder="Votre email" v-model="user.email">
-            <input type="password" placeholder="Votre mot de passe" v-model="user.password">
-            <button type="submit">SE CONNECTER</button>
-        </form>
-        <div>Vous n'avez pas encore de compte? 
-            <router-link to="/signup">Créer un compte</router-link>
         </div>
-    </article>
+    </div>
 </template>
 
-<style>
-a {
-    text-decoration: none;
-}
+<style scoped>
+    article {
+        padding: 16px;
+    }
+    form {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        margin-bottom: 5px;
+        
+    }
+    .switch-to-signup-theme {
+        color : rgb(209 , 70, 82)
+    }
+    .switch-to-signup-theme:hover {
+        font-weight: bold;
+        text-decoration-line: underline;
+    }
+    .error-list-theme {
+            color: rgb(255, 36, 30) !important;        
+    }
 </style>
 
 <script>

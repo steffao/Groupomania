@@ -23,7 +23,7 @@
         padding: 8px;
         margin-bottom: 8px ;
         border-radius: 10px;
-        background-color: rgb(255, 209, 210);
+        background-color: rgb(193, 211, 236);
     }
     @media screen and (max-width: 601px) {
         #comments-btn {

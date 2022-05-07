@@ -1,14 +1,20 @@
 <template>
-    <button  @click="deletePost(post)" class="w3-button w3-theme-d2 w3-margin-bottom w3-right">
+    <button  @click="deletePost(post)" class="w3-button post-delete-btn w3-margin-bottom w3-right">
         <i class="fa-regular fa-trash-can"></i>   Supprimer la publication
     </button> 
 </template>
 
-<style>
-    a {
-        text-decoration: none;
+<style scoped>
+    .post-delete-btn {
+        color: rgb(255, 36, 30) !important;
+        background-color: rgb(255, 255, 255) !important;
+        
     }
-    </style>
+    .post-delete-btn:hover {
+        color: rgb(255, 255, 255) !important;
+        background-color: rgb(255, 36, 30) !important;        
+    }
+</style>
     
     <script>
     import { mapState } from 'vuex'
