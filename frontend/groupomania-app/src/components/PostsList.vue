@@ -1,74 +1,78 @@
-
 <template>
-    <PostCreator @postCreated="getAllPosts"/>
-    
-    <article v-for="(post,index) in posts" :key="index">           
-        <div id="id" >{{post.id}}</div>           
-        <div >{{post.User.first_name}} {{post.User.last_name}}</div>
-        <div >{{post.title}}</div>
-        <div >{{post.content}}</div>
-        <div v-if="post.media_url">
-            <video v-if="post.media_url.endsWith('mp4')" :src="post.media_url" alt=""></video>
-            <img v-else :src="post.media_url" alt="">
-        </div> 
-        <CommentsList :post="post"/>     
+    <!-- Middle Column -->
+
+
+    <PostCreator @postCreated="getAllPosts" />
+    <article v-for="(post,index) in posts" :key="index" class="gm-container gm-card gm-white gm-round gm-margin"><br>
+        <span class="gm-right gm-opacity">1 min</span>
+        <div class="gm-theme" >{{post.User.first_name}} {{post.User.last_name}}</div>
+        <h2>{{post.title}}</h2>
+
+        <hr class="gm-clear">
+        <p>{{post.content}}</p>
+        <div class="gm-row-padding" style="margin:0 -16px">
+            <div v-if="post.media_url" class="gm-half">
+                <video v-if="post.media_url.endsWith('mp4')" :src="post.media_url" alt="" style="width: 75%"
+                    controls></video>
+                <img v-else :src="post.media_url" alt="" style="width:75%">
+            </div>
+        </div>
+        <hr class="gm-clear">
+        <CommentsList :post="post" />
         <DeletePostButton v-if="isAdmin || post.User.id == user.id" @postDeleted="getAllPosts" :post="post" />
-        
     </article>
+    <!-- End Middle Column -->
 </template>
 
-<style>
-a {
-    text-decoration: none;
-}
+<style scoped>
 </style>
 
 <script>
-import { mapState } from 'vuex'
-import PostCreator from './PostCreator.vue'
-import DeletePostButton from './DeletePostButton.vue'
-import CommentsList from './CommentsList.vue'
+    import { mapState } from 'vuex'
+    import PostCreator from './PostCreator.vue'
+    import DeletePostButton from './DeletePostButton.vue'
+    import CommentsList from './CommentsList.vue'
 
-export default {
-    name: "PostsList",
-    components : {
-        PostCreator,
-        DeletePostButton,
-        CommentsList
-        
-    },
-    
-    data: function (){
-        return{   
-            posts : [],  
-        }
-    },
-    
-    computed : {
-        ...mapState({user:'user', token:'token'}),
-        isAdmin : function() {
-            return this.$store.getters.IS_USER_ISADMIN_GETTER
-        }
-    },
-    mounted() {        
-        this.getAllPosts()
-    },
-    methods : {
-        getAllPosts: function (){            
-            const apiUrl = 'http://localhost:3000/api/posts'
-            fetch(apiUrl, {
-                method: 'get',
-                headers: {
-                    'Content-Type' : 'application/json',
-                    'Authorization' : `Bearer ${this.token}`,
-                },                       
-            })
-            .then(res => res.json()) 
-                .then( posts => {
-                    this.posts = posts;             
+    export default {
+        name: "PostsList",
+        components: {
+            PostCreator,
+            DeletePostButton,
+            CommentsList
+
+        },
+
+        data: function () {
+            return {
+                posts: [],
+            }
+        },
+
+        computed: {
+            ...mapState({ user: 'user', token: 'token' }),
+            isAdmin: function () {
+                return this.$store.getters.IS_USER_ISADMIN_GETTER
+            }
+        },
+        mounted() {
+            this.getAllPosts()
+        },
+        methods: {
+            getAllPosts: function () {
+                const apiUrl = 'http://localhost:3000/api/posts'
+                fetch(apiUrl, {
+                    method: 'get',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.token}`,
+                    },
                 })
-            .catch(responseError => this.errors.push(responseError.error));                        
-        }  
-    }
-}   
+                    .then(res => res.json())
+                    .then(posts => {
+                        this.posts = posts;
+                    })
+                    .catch(responseError => this.errors.push(responseError.error));
+            }
+        }
+    }   
 </script>
