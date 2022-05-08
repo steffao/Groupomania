@@ -16,7 +16,9 @@
                     <div class="gm-dropdown-content gm-card-4 gm-bar-block">
                         <button class="user-full-name gm-bar-item gm-button" disabled>{{user.firstName}}
                             {{user.lastName}} &nbsp;</button>
-                        <button @click="logoutUser" class="gm-bar-item gm-button">Déconnexion</button>
+                        <button @click="logoutUser" class="gm-bar-item gm-button">
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp; Déconnexion
+                        </button>
                         <DeleteUserButton />
                     </div>
                 </div>
