@@ -5,7 +5,7 @@
     <PostCreator @postCreated="getAllPosts" />
     <article v-for="(post,index) in posts" :key="index" class="gm-container gm-card gm-white gm-round gm-margin"><br>
         <span class="gm-right gm-opacity">1 min</span>
-        <div>{{post.User.first_name}} {{post.User.last_name}}</div>
+        <div class="gm-theme" >{{post.User.first_name}} {{post.User.last_name}}</div>
         <h2>{{post.title}}</h2>
 
         <hr class="gm-clear">

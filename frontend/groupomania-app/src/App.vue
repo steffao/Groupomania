@@ -18,9 +18,7 @@
 
 <style lang="css">
   @import '../src/assets/style/style.css';
-  @import url('https://fonts.googleapis.com/css?family=Open+Sans');
   @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
-  @import url("https://kit.fontawesome.com/ac6d6fa5a1.js");
 
   body {
     background-image: url("./assets/images/groupomania_logo/icon.png");
