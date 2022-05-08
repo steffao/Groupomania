@@ -2,62 +2,62 @@
     <form id="commentForm" @submit="createComment">
         <div v-if="errors.length > 0" class="form__errors">
             <p class="error-list-theme">Formulaire incorrect. Veuillez corriger la ou les erreur(s) suivantes</p>
-            <ul> 
-                <li v-for="(error,index) in errors" :key="index" class="error-list-theme">{{ error }}</li> 
+            <ul>
+                <li v-for="(error,index) in errors" :key="index" class="error-list-theme">{{ error }}</li>
             </ul>
         </div>
         <div class="post-comment">
-            <input type="text" placeholder="Répondre" v-model="newComment.content" class="w3-border w3-padding">
-            <button type="submit" class="w3-button w3-theme-d2 w3-margin-bottom">Publier un commentaire</button>
-        </div>        
+            <input type="text" placeholder="Répondre" v-model="newComment.content" class="gm-border gm-padding gm-margin-bottom-input">
+            <button type="submit" class="gm-button gm-theme-d2 gm-margin-bottom">Publier un commentaire</button>
+        </div>
     </form>
-    <hr class="w3-clear">
+    <hr class="gm-clear">
 </template>
 
-<style>
+<style scoped>
     .post-comment {
         display: flex;
         flex-direction: column;
     }
-    .error-list-theme {
-        color: rgb(255, 36, 30) !important;  
-    }
 
+    .error-list-theme {
+        color: rgb(255, 36, 30) !important;
+    }
 </style>
-    
+
 <script>
     import { mapState } from 'vuex'
-    
+
     export default {
         name: "CommentCreator",
-        
-        data: function (){
-            return{ 
-                errors : [],
-                newComment : {
-                    content : '',
+
+        data: function () {
+            return {
+                errors: [],
+                newComment: {
+                    content: '',
                     postId: '',
-                    userId : '',
-                    
+                    userId: '',
+
                 },
             }
         },
         props: ['post'],
-        computed : {
-            ...mapState({user:'user', token:'token'}),
-            isAdmin : function() {
+        computed: {
+            ...mapState({ user: 'user', token: 'token' }),
+            isAdmin: function () {
                 return this.$store.getters.IS_USER_ISADMIN_GETTER
             }
         },
         mounted() {
         },
-        methods : {
-            test : function(e) {
+        methods: {
+            test: function (e) {
                 e.preventDefault();
                 console.log(this.post)
             },
             checkCommentForm: function () {
-                this.errors = [];                
+                this.errors = [];
                 if (!this.newComment.content) {
                     this.errors.push('Veuillez saisir une publication');
                 }
@@ -66,41 +66,42 @@
                 }
                 return false
             },
-            createComment : function(e){
+            createComment: function (e) {
                 e.preventDefault();
                 this.newComment.userId = this.user.id
                 this.newComment.postId = this.post.id
                 console.log(this.newComment)
-                
-                           
+
+
                 if (this.checkCommentForm()) {
                     const apiUrl = `http://localhost:3000/api/posts/${this.post.id}/comments`
                     fetch(apiUrl, {
                         method: 'post',
                         headers: {
-                            'Authorization' : `Bearer ${this.token}`,
-                            'Content-Type' : 'application/json',},
-                        body: JSON.stringify(this.newComment),                    
-                    })                
-                    .then(res => res.json())
-                    .then( res => {
-                            if (res.error ) {
+                            'Authorization': `Bearer ${this.token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(this.newComment),
+                    })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (res.error) {
                                 this.errors.push(res.error)
-    
+
                             } else {
                                 this.$emit('commentCreated') // Event vers parent
                                 this.newComment = {
-                                    content : '',
-                                    title : '',
-                                    userId : '',
+                                    content: '',
+                                    title: '',
+                                    userId: '',
                                 }
-                                
+
                                 document.getElementById('commentForm').reset() // Clear form
                             }
-                    })
-                    .catch(responseError => this.errors.push(responseError.error ? responseError.error : responseError));
+                        })
+                        .catch(responseError => this.errors.push(responseError.error ? responseError.error : responseError));
                 }
             },
         }
     }   
-    </script>
+</script>

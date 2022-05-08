@@ -1,19 +1,19 @@
 <template>
-  
+
   <div id="app">
     <!-- Header -->
     <NavBar />
     <!-- Page Container -->
-    <main class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
-      <div class="w3-row">
+    <main class="gm-container gm-content" style="max-width:1400px;margin-top:80px">
+      <div class="gm-row">
         <router-view />
-      </div>      
+      </div>
     </main>
     <FooterBar />
   </div>
-  
-  
-  
+
+
+
 </template>
 
 <style lang="css">
@@ -21,40 +21,40 @@
   @import url('https://fonts.googleapis.com/css?family=Open+Sans');
   @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
   @import url("https://kit.fontawesome.com/ac6d6fa5a1.js");
+
   body {
     background-image: url("./assets/images/groupomania_logo/icon.png");
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: 135% ;
+    background-size: 135%;
     background-position: 185% 60%;
   }
-  
 </style>
 
 <script>
-import NavBar from './components/NavBar.vue'
-import FooterBar from './components/FooterBar.vue'
-import {getCookie} from './utils/cookie.js'
+  import NavBar from './components/NavBar.vue'
+  import FooterBar from './components/FooterBar.vue'
+  import { getCookie } from './utils/cookie.js'
 
-export default {
-  components : {
-    NavBar,
-    FooterBar
-  },
-  metaInfo :{
-    title: 'Groupomania'
-  },
-  created () {
-    const rawUserData = getCookie('userData')
-    if (rawUserData) {      
+  export default {
+    components: {
+      NavBar,
+      FooterBar
+    },
+    metaInfo: {
+      title: 'Groupomania'
+    },
+    created() {
+      const rawUserData = getCookie('userData')
+      if (rawUserData) {
 
-      const userData = JSON.parse(rawUserData)
-      
-      if (typeof(userData) == 'object' && userData.user && userData.token) {        
-        this.$store.dispatch('updateUserData',userData)    
-      }      
-    }
-  },
-}
-  
+        const userData = JSON.parse(rawUserData)
+
+        if (typeof (userData) == 'object' && userData.user && userData.token) {
+          this.$store.dispatch('updateUserData', userData)
+        }
+      }
+    },
+  }
+
 </script>

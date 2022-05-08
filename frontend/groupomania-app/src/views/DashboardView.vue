@@ -1,6 +1,5 @@
 
-<template>
-    <h1>Bienvenue {{user.firstName}}  !</h1>
+<template>    
     <section v-if="isAuthenticated" class="posts__list">
         <PostsList /> 
     </section>
