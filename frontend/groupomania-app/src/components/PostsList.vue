@@ -4,7 +4,7 @@
 
     <PostCreator @postCreated="getAllPosts" />
     <article v-for="(post,index) in posts" :key="index" class="gm-container gm-card gm-white gm-round gm-margin"><br>
-        <span class="gm-right gm-opacity">{{post.created_at}}</span>
+        <span class="gm-right gm-opacity">{{getTimeAgo(post.created_at)}}</span>
         <span class="full-name-color" >{{post.User.first_name}} {{post.User.last_name}}</span>
         <h2>{{post.title}}</h2>
 
@@ -35,6 +35,8 @@
     import PostCreator from './PostCreator.vue'
     import DeletePostButton from './DeletePostButton.vue'
     import CommentsList from './CommentsList.vue'
+    import {  formatDistanceToNowStrict  } from 'date-fns'
+    import {  fr  } from 'date-fns/locale'
 
     export default {
         name: "PostsList",
@@ -47,7 +49,7 @@
 
         data: function () {
             return {
-                posts: [],
+                posts: [],             
             }
         },
 
@@ -55,12 +57,19 @@
             ...mapState({ user: 'user', token: 'token' }),
             isAdmin: function () {
                 return this.$store.getters.IS_USER_ISADMIN_GETTER
-            }
+            },
+            
         },
-        mounted() {
+        mounted() {            
             this.getAllPosts()
         },
         methods: {
+            getTimeAgo: function (postCreatedAt) {
+                const renderFormatDistance = 
+                    'il y a ' + formatDistanceToNowStrict(new Date(postCreatedAt), {addSuffix:false,locale : fr});
+                
+                return renderFormatDistance
+            },
             getAllPosts: function () {
                 const apiUrl = 'http://localhost:3000/api/posts'
                 fetch(apiUrl, {
