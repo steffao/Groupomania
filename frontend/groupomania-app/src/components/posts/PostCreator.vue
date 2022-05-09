@@ -53,7 +53,6 @@
         padding: 8px 8px;
         outline: none;
         white-space: nowrap;
-        -webkit-user-select: none;
         cursor: pointer;
     }
     .custom-file-input:hover::before {
