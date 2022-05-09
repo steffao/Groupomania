@@ -7,7 +7,6 @@
         <span class="gm-right gm-opacity">{{getTimeAgo(post.created_at)}}</span>
         <span class="full-name-color" >{{post.User.first_name}} {{post.User.last_name}}</span>
         <h2>{{post.title}}</h2>
-
         <hr class="gm-clear">
         <p>{{post.content}}</p>
         <div class="gm-row-padding" style="margin:0 -16px">
@@ -34,7 +33,7 @@
     import { mapState } from 'vuex'
     import PostCreator from './PostCreator.vue'
     import DeletePostButton from './DeletePostButton.vue'
-    import CommentsList from './CommentsList.vue'
+    import CommentsList from '../comments/CommentsList.vue'
     import {  formatDistanceToNowStrict  } from 'date-fns'
     import {  fr  } from 'date-fns/locale'
 
@@ -46,19 +45,16 @@
             CommentsList
 
         },
-
         data: function () {
             return {
                 posts: [],             
             }
         },
-
         computed: {
             ...mapState({ user: 'user', token: 'token' }),
             isAdmin: function () {
                 return this.$store.getters.IS_USER_ISADMIN_GETTER
-            },
-            
+            },            
         },
         mounted() {            
             this.getAllPosts()

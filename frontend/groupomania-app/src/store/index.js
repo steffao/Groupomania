@@ -47,7 +47,7 @@ export default createStore({
             commit('RESET_STATE')
             deleteCookie('userData')
             
-          },       
+        },       
     }
   })
 

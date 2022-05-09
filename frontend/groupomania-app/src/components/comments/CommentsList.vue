@@ -30,7 +30,6 @@
         border-radius: 10px;
         background-color: rgb(193, 211, 236);
     }
-
     @media screen and (max-width: 601px) {
         #comments-btn {
             width: 100%;
@@ -46,7 +45,6 @@
     import DeleteCommentButton from './DeleteCommentButton.vue'
     import {  formatDistanceToNowStrict  } from 'date-fns'
     import {  fr  } from 'date-fns/locale'
-
 
     export default {
         name: "CommentsList",

@@ -53,10 +53,7 @@
                             }
                         })
                         .catch(responseError => alert(responseError.error ? responseError.error : responseError));
-
                 }
-
-
             },
         }
     }   

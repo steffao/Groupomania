@@ -1,19 +1,21 @@
 <template>
-
   <div id="app">
     <!-- Header -->
-    <NavBar />
+    <header>
+      <NavBar />
+    </header>
+    
     <!-- Page Container -->
     <main class="gm-container gm-content" style="max-width:1400px;margin-top:80px">
       <div class="gm-row">
         <router-view />
       </div>
     </main>
+    <footer>
+      
+    </footer>
     <FooterBar />
   </div>
-
-
-
 </template>
 
 <style lang="css">
@@ -30,8 +32,8 @@
 </style>
 
 <script>
-  import NavBar from './components/NavBar.vue'
-  import FooterBar from './components/FooterBar.vue'
+  import NavBar from './components/navigation/NavBar.vue'
+  import FooterBar from './components/navigation/FooterBar.vue'
   import { getCookie } from './utils/cookie.js'
 
   export default {
