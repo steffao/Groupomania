@@ -1,29 +1,27 @@
 <template>
-    <button @click="deletePost(post)" class="gm-button post-delete-btn gm-margin-bottom gm-right">
-        <i class="fa fa-trash"></i> Supprimer la publication
+    <button @click="deleteComment(comment)" class="gm-button comment-delete-btn gm-margin-bottom">
+        <i class="fa fa-times" aria-hidden="true"></i> Supprimer le commentaire
     </button>
 </template>
 
 <style scoped>
-    .post-delete-btn {
+    .comment-delete-btn {
         color: rgb(255, 36, 30) !important;
         background-color: rgb(255, 255, 255) !important;
-
+        font-size: 12px;
     }
 
-    .post-delete-btn:hover {
-        color: rgb(255, 255, 255) !important;
-        background-color: rgb(255, 36, 30) !important;
+    .comment-delete-btn:hover {
+        text-decoration: underline;
     }
 </style>
 
 <script>
     import { mapState } from 'vuex'
-    //import PostsList from './PostsList.vue'
 
     export default {
-        name: "DeletePostButton",
-        props: ['post'],
+        name: "DeleteCommentButton",
+        props: ['post', 'comment'],
 
         data: function () {
             return {
@@ -39,14 +37,16 @@
         mounted() {
         },
         methods: {
-            deletePost: function (post) {
-                this.postId = post.id
-                this.userId = post.User.id
+            deleteComment: function (comment) {
+                this.postId = this.post.id
+                this.commentId = comment.id
+                this.userId = comment.User.id
+                console.log(this.postId)
 
-                if (this.isAdmin || post.User.id == this.user.id) {
+                if (this.isAdmin || comment.User.id == this.user.id) {
 
                     const apiUrl = 'http://localhost:3000/api/posts'
-                    fetch(`${apiUrl}/${this.postId}`, {
+                    fetch(`${apiUrl}/${this.postId}/comments/${this.commentId}`, {
                         method: 'delete',
                         headers: {
                             'Content-Type': 'application/json',
@@ -59,14 +59,12 @@
                                 alert(res.error)
 
                             } else {
-                                this.$emit('postDeleted') // Event vers parent                              
+                                this.$emit('CommentDeleted') // Event vers parent                              
                             }
                         })
                         .catch(responseError => alert(responseError.error ? responseError.error : responseError));
 
                 }
-
-
             },
         }
     }   

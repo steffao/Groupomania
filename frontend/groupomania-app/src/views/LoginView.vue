@@ -38,18 +38,14 @@
         justify-content: space-around;
         flex-direction: column;
         margin-bottom: 5px;
-
     }
-
     .switch-to-signup-theme {
         color: rgb(209, 70, 82)
     }
-
     .switch-to-signup-theme:hover {
         font-weight: bold;
         text-decoration-line: underline;
     }
-
     .error-list-theme {
         color: rgb(255, 36, 30) !important;
     }
@@ -124,5 +120,4 @@
             }
         },
     }
-
 </script>

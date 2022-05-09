@@ -11,6 +11,7 @@
 
         <article v-for="(comment,index) in comments" :key="index">
             <article class="comment-bubble">
+                <span class="gm-right gm-opacity">{{getTimeAgo(comment.created_at)}}</span>
                 <h3><b>{{comment.User.first_name}} {{comment.User.last_name}}</b></h3>
                 <div>{{comment.content}}</div>
             </article>
@@ -29,7 +30,6 @@
         border-radius: 10px;
         background-color: rgb(193, 211, 236);
     }
-
     @media screen and (max-width: 601px) {
         #comments-btn {
             width: 100%;
@@ -43,7 +43,8 @@
     import { mapState } from 'vuex'
     import CommentCreator from './CommentCreator.vue'
     import DeleteCommentButton from './DeleteCommentButton.vue'
-
+    import {  formatDistanceToNowStrict  } from 'date-fns'
+    import {  fr  } from 'date-fns/locale'
 
     export default {
         name: "CommentsList",
@@ -80,6 +81,12 @@
                     this.isVisible = true;
                     this.getAllComments()
                 }
+            },
+            getTimeAgo: function (commentCreatedAt) {
+                const renderFormatDistance = 
+                    'il y a ' + formatDistanceToNowStrict(new Date(commentCreatedAt), {addSuffix:false,locale : fr});
+                
+                return renderFormatDistance
             },
 
             getAllComments: function () {

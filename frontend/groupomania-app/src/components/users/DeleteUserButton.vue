@@ -1,5 +1,7 @@
 <template>
-    <button class="gm-bar-item gm-button" @click="deleteUser">Supprimer votre compte utilisateur</button>
+    <button class="gm-bar-item gm-button" @click="deleteUser">
+        <i class="fa fa-trash"></i>&nbsp; Supprimer votre compte utilisateur
+    </button>
 </template>
 
 <style>
@@ -51,10 +53,7 @@
                             }
                         })
                         .catch(responseError => alert(responseError.error ? responseError.error : responseError));
-
                 }
-
-
             },
         }
     }   

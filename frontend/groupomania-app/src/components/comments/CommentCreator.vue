@@ -19,7 +19,6 @@
         display: flex;
         flex-direction: column;
     }
-
     .error-list-theme {
         color: rgb(255, 36, 30) !important;
     }
@@ -38,7 +37,6 @@
                     content: '',
                     postId: '',
                     userId: '',
-
                 },
             }
         },

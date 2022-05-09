@@ -17,9 +17,9 @@
                             class="gm-border gm-padding gm-margin-bottom">
                         <input type="text" placeholder="Nom" v-model="user.lastName"
                             class="gm-border gm-padding gm-margin-bottom">
-                        <input type="email" placeholder="Votre email" v-model="user.email"
+                        <input type="email" placeholder="Email" v-model="user.email"
                             class="gm-border gm-padding gm-margin-bottom">
-                        <input type="password" placeholder="Votre mot de passe" v-model="user.password"
+                        <input type="password" placeholder="Mot de passe contenant : 1 majuscule, 1 miniscule, 1 chiffre, 1 caractère spécial. 8 caractères minimum" v-model="user.password"
                             class="gm-border gm-padding gm-margin-bottom">
                         <button type="submit" class="gm-button gm-theme">CRÉER UN COMPTE</button>
                     </form>
@@ -36,25 +36,20 @@
     article {
         padding: 16px;
     }
-
     form {
         display: flex;
         /* flex-wrap: wrap; */
         justify-content: space-around;
         flex-direction: column;
         margin-bottom: 5px;
-
     }
-
     .switch-to-signup-theme {
         color: rgb(209, 70, 82)
     }
-
     .switch-to-signup-theme:hover {
         font-weight: bold;
         text-decoration-line: underline;
     }
-
     .error-list-theme {
         color: rgb(255, 36, 30) !important;
     }
@@ -117,11 +112,11 @@
 
             validFirstName: function (firstName) {
                 var re = /^[a-zA-Z-' ]+$/;
-                return re.test(firstName);
+                return firstName.trim() ? re.test(firstName) : false;
             },
             validLastName: function (lastName) {
                 var re = /^[a-zA-Z-' ]+$/;
-                return re.test(lastName);
+                return lastName.trim() ? re.test(lastName) : false;
             },
             validEmail: function (email) {
                 var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -154,9 +149,7 @@
                         })
                         .catch(responseError => this.errors.push(responseError.error));
                 }
-
             }
         }
-
     }
 </script>

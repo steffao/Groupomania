@@ -44,7 +44,6 @@
     .custom-file-input::-webkit-file-upload-button {
         visibility: hidden;
     }
-
     .custom-file-input::before {
         content: 'Insérer une image/vidéo';
         background-color: rgb(17, 33, 56);
@@ -54,18 +53,14 @@
         padding: 8px 8px;
         outline: none;
         white-space: nowrap;
-        -webkit-user-select: none;
         cursor: pointer;
     }
-
     .custom-file-input:hover::before {
         border-color: black;
     }
-
     .custom-file-input:active::before {
         background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
     }
-
     @media only screen and (max-width: 600px) {
         .custom-file-input::before {
             content: 'Image ou vidéo';
@@ -74,7 +69,6 @@
             text-overflow: ellipsis;
         }
     }
-
     .error-list-theme {
         color: rgb(255, 36, 30) !important;
     }
@@ -122,7 +116,6 @@
                     this.errors.push('Veuillez sélectionner un fichier infèrieur à 3MB');
                 }
 
-
                 if (!this.errors.length) {
                     return true;
                 }
@@ -130,7 +123,6 @@
             },
             createPost: function (e) {
                 e.preventDefault();
-
                 this.newPost.userId = this.user.id
 
                 const formData = new FormData()
