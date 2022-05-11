@@ -25,13 +25,16 @@ Clone this repo, run `npm install`, from both backend and frontend repository.
 
 Create your SQL database
 
-Create a .env file and update the variables according to .env.example file
+Create a .env file  into the `backend` repository and update the variables according to .env.example file
+
+Create a depository `medias` into the `backend` depository
 
 
 ## Launch ##
 
 ### Backend ###
 Run `npx sequelize db:migrate` to import the database models and settings
+
 Run `node server`  OR from backend repository.
 
 ### Frontent ###
