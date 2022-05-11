@@ -21,13 +21,13 @@ To develop this app, I used the following languages :
 
 ## Installation ##
 
-Clone this repo, run `npm install`, from both backend and frontend repository.
+Clone this repo, run `npm install`, from both backend and frontend/groupomania-app repository.
 
 Create your SQL database
 
 Create a .env file  into the `backend` repository and update the variables according to .env.example file
 
-Create a depository `medias` into the `backend` depository
+Create a repository `medias` into the backend repository
 
 
 ## Launch ##
@@ -35,7 +35,7 @@ Create a depository `medias` into the `backend` depository
 ### Backend ###
 Run `npx sequelize db:migrate` to import the database models and settings
 
-Run `node server`  OR from backend repository.
+Run `node server` from `backend` repository.
 
 ### Frontent ###
 Run `npm run serve` from frontend/groupomania-app repository.
