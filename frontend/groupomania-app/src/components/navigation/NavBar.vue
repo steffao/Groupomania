@@ -4,7 +4,7 @@
     <header v-if="token">
         <div class="gm-top">
             <div class="gm-bar gm-theme-d2 gm-left-align gm-large">
-                <a href="#" class="gm-bar-item gm-button gm-padding-large gm-theme-d4">
+                <a href="/" class="gm-bar-item gm-button gm-padding-large gm-theme-d4">
                     <img class="gm-margin-right"
                         src="../../assets/images/groupomania_logo/icon-left-font-monochrome-white.svg"
                         alt="Logo de Groupomania" style="max-height: 20px">
@@ -59,6 +59,9 @@
 </template>
 
 <style scoped>
+    a:focus-visible {
+    outline: -webkit-focus-ring-color auto 1px;
+    }
     @media only screen and (max-width: 424px) {
         .user-full-name {
             display: none;

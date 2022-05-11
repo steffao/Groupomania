@@ -3,6 +3,7 @@
 
 
     <PostCreator @postCreated="getAllPosts" />
+    
     <article v-for="(post,index) in posts" :key="index" class="gm-container gm-card gm-white gm-round gm-margin"><br>
         <span class="gm-right gm-opacity">{{getTimeAgo(post.created_at)}}</span>
         <span class="full-name-color" >{{post.User.first_name}} {{post.User.last_name}}</span>

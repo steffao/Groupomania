@@ -21,17 +21,24 @@ To develop this app, I used the following languages :
 
 ## Installation ##
 
-Clone this repo, run `npm install`, from both backend and frontend repository.
+Clone this repo, run `npm install`, from both backend and frontend/groupomania-app repository.
 
 Create your SQL database
 
-Create a .env file and update the variables according to .env.example file
+Create a .env file  into the `backend` repository and update the variables according to .env.example file
+
+Create a repository `medias` into the backend repository
 
 
 ## Launch ##
 
+### Backend ###
+Run `npx sequelize db:migrate` to import the database models and settings
+
+Run `node server` from `backend` repository.
+
+### Frontent ###
 Run `npm run serve` from frontend/groupomania-app repository.
-Run `nodemon server` from backend repository.
 
 This should both run the local server and launch your browser.
 
