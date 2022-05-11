@@ -30,8 +30,12 @@ Create a .env file and update the variables according to .env.example file
 
 ## Launch ##
 
+### Backend ###
+Run `npx sequelize db:migrate` to import the database models and settings
+Run `node server`  OR from backend repository.
+
+### Frontent ###
 Run `npm run serve` from frontend/groupomania-app repository.
-Run `nodemon server` from backend repository.
 
 This should both run the local server and launch your browser.
 

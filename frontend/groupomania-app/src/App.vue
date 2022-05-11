@@ -11,9 +11,6 @@
         <router-view />
       </div>
     </main>
-    <footer>
-      
-    </footer>
     <FooterBar />
   </div>
 </template>
